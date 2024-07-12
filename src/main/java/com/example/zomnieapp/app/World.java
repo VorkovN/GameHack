@@ -1,7 +1,10 @@
 package com.example.zomnieapp.app;
 
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+
 import org.springframework.http.ResponseEntity;
 
 @Component
@@ -16,7 +19,9 @@ public class World {
 
     public void printWorld() {
         try {
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(URL, String.class);
+            HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
+            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
+
             String responseBody = responseEntity.getBody();
             System.out.println(formatWorld(responseBody));
         } catch (Exception e) {
@@ -32,3 +37,4 @@ public class World {
         return formattedWorld.toString();
     }
 }
+

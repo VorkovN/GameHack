@@ -10,12 +10,13 @@ import org.springframework.stereotype.Component;
 public class Main {
 
     private final Registration registration;
+    private final World world;
 
     @Scheduled(cron = "*/1 * * * * *")
     public void mainTask(){
         var isSuccessfulReg = registration.registration();
         if (isSuccessfulReg) {
-
+            world.printWorld();
         }
     }
 }
