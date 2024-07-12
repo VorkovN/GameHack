@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class Zombies {
+public class Zombie {
     private int x;
     private int y;
 }

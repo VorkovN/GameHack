@@ -2,7 +2,7 @@ package com.example.zomnieapp.commands;
 
 import com.example.zomnieapp.app.HeaderConfig;
 import com.example.zomnieapp.units.Base;
-import com.example.zomnieapp.units.Zombies;
+import com.example.zomnieapp.units.Zombie;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,8 +27,8 @@ public class UnitsService {
         this.restTemplate = new RestTemplate();
     }
 
-    public List<Zombies> getZombies() {
-        List<Zombies> zombiesList = new ArrayList<>();
+    public List<Zombie> getZombies() {
+        List<Zombie> zombieList = new ArrayList<>();
         try {
             HttpHeaders headers = HeaderConfig.getAuthHeader();
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -40,16 +40,16 @@ public class UnitsService {
             JsonNode zombiesNode = rootNode.path("zombies");
 
             for (JsonNode zombieNode : zombiesNode) {
-                Zombies zombie = new Zombies(
+                Zombie zombie = new Zombie(
                         zombieNode.path("x").asInt(),
                         zombieNode.path("y").asInt()
                 );
-                zombiesList.add(zombie);
+                zombieList.add(zombie);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return zombiesList;
+        return zombieList;
     }
 
     public List<Base> getBases() {
