@@ -1,11 +1,10 @@
-package com.example.zomnieapp.app;
+package com.example.zomnieapp.commands;
 
+import com.example.zomnieapp.app.HeaderConfig;
+import com.example.zomnieapp.temp.JSON;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-
-import org.springframework.http.ResponseEntity;
 
 @Component
 public class World {
@@ -20,12 +19,14 @@ public class World {
     public void printWorld() {
         try {
             HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
-            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
+//            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
 
-            String responseBody = responseEntity.getBody();
+//            String responseBody = responseEntity.getBody();
+            var json = new JSON();
+            String responseBody = json.getMap();
             System.out.println(formatWorld(responseBody));
         } catch (Exception e) {
-            System.out.println("An error occurred: " + e.getMessage());
+            System.out.println("An error occurred at World class: " + e.getMessage());
         }
     }
 

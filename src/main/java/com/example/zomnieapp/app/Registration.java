@@ -1,6 +1,5 @@
 package com.example.zomnieapp.app;
 
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +13,14 @@ public class Registration {
 
     private final RestTemplate restTemplate;
     private static final String URL = "https://games-test.datsteam.dev/play/zombidef/participate";
+    private boolean completedRegistration = true;
 
     public Registration() {
         this.restTemplate = new RestTemplate();
     }
 
     public boolean registration() {
+        if (completedRegistration) return true;
         try {
             HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
             ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.PUT, requestEntity, String.class);
@@ -28,6 +29,7 @@ public class Registration {
             System.out.println(responseEntity.getBody());
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                completedRegistration = true;
                 return true;
             } else {
                 System.out.println("Unexpected response status: " + responseEntity.getStatusCode());
