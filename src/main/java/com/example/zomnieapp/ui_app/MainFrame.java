@@ -1,83 +1,93 @@
 package com.example.zomnieapp.ui_app;
 
-import com.example.zomnieapp.ui_app.data.RenderData;
+import com.example.zomnieapp.ui_app.common.GridPanel;
 import com.example.zomnieapp.ui_app.data.RenderDataRepository;
+import com.example.zomnieapp.ui_app.data.model.PlayerStatus;
+import com.example.zomnieapp.ui_app.data.model.RenderMapPoint;
+import com.example.zomnieapp.ui_app.data.real.RenderDataRepositoryImpl;
+import com.example.zomnieapp.ui_app.mapper.MapMapper;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-import java.util.Random;
 
 @Component
 public class MainFrame extends JFrame {
 
-    public static volatile RenderDataRepository dataRepository = new RenderDataRepository();
-    JLabel label = new JLabel("Hello, Spring with Swing!", SwingConstants.LEFT);
+    public static volatile RenderDataRepository dataRepository = new RenderDataRepositoryImpl();
 
     private JPanel textPanel;
-    private JPanel gridPanel;
-    private int gridSize = 10; // Example grid size
+    private GridPanel gridPanel;
+    private JTable playerStatusTable;
+    private DefaultTableModel tableModel;
 
     public MainFrame() {
         setTitle("Spring Boot with Swing");
-        setSize(400, 300);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         initUI();
-        dataRepository.listenToNewData(data -> {
-            showData(data);
+        dataRepository.listenToNewData(new RenderDataRepository.OnNewDataListener() {
+            @Override
+            public void newMap(List<List<RenderMapPoint>> map) {
+                showMap(MapMapper.mapToColors(map));
+            }
+
+            @Override
+            public void newPlayer(PlayerStatus playerStatus) {
+                showPlayerStatus(playerStatus);
+            }
         });
     }
-
 
     private void initUI() {
         textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
-        gridPanel = new JPanel(new GridLayout(gridSize, gridSize));
-
-        // Initialize grid with white squares
-        for (int i = 0; i < gridSize * gridSize; i++) {
-            JPanel panel = new JPanel();
-            panel.setBackground(getRandomColor());
-            gridPanel.add(panel);
-        }
+        gridPanel = new GridPanel(1, 1);
 
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(textPanel, BorderLayout.NORTH);
         getContentPane().add(gridPanel, BorderLayout.CENTER);
+
+        // Инициализация таблицы
+        String[] columnNames = {"Name", "Enemy Block Kills", "Game Ended At", "Gold", "Points", "Zombie Kills"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+        playerStatusTable = new JTable(tableModel);
+        playerStatusTable.setFillsViewportHeight(true);
+
+        JScrollPane scrollPane = new JScrollPane(playerStatusTable);
+        scrollPane.setPreferredSize(new Dimension(800, 200));
+        getContentPane().add(scrollPane, BorderLayout.SOUTH);
     }
 
-    private static Color getRandomColor() {
-        int randInt = new Random().nextInt(4);
-        if (randInt == 0) {
-            return Color.WHITE;
-        } else if (randInt == 1) {
-            return Color.GREEN;
-        } else if (randInt == 2) {
-            return Color.BLUE;
-        } else {
-            return Color.YELLOW;
-        }
-    }
+    private void showMap(List<List<Color>> colors) {
+        int rows = colors.size();
+        int cols = colors.get(0).size();
+        gridPanel.resizeGrid(rows, cols);
 
-    private void showData(RenderData data) {
-        textPanel.removeAll();
-        for (String text : data.getTexts()) {
-            textPanel.add(new JLabel(text));
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                java.awt.Component component = gridPanel.getComponent(row * cols + col);
+                component.setBackground(colors.get(row).get(col));
+            }
         }
-        textPanel.revalidate();
-        textPanel.repaint();
 
-        // Update grid panel with new colors
-        List<Color> colors = data.getColors();
-        java.awt.Component[] components = gridPanel.getComponents();
-        for (int i = 0; i < components.length; i++) {
-            components[i].setBackground(colors.get(i % colors.size()));
-        }
         gridPanel.revalidate();
         gridPanel.repaint();
+    }
+
+    private void showPlayerStatus(PlayerStatus playerStatus) {
+        tableModel.addRow(new Object[]{
+                playerStatus.getName(),
+                playerStatus.getEnemyBlockKills(),
+                playerStatus.getGameEndedAt(),
+                playerStatus.getGold(),
+                playerStatus.getPoints(),
+                playerStatus.getZombieKills()
+        });
     }
 }

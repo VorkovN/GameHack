@@ -1,26 +1,21 @@
 package com.example.zomnieapp.ui_app.data;
 
-import java.awt.*;
-import java.util.ArrayList;
+import com.example.zomnieapp.ui_app.data.model.PlayerStatus;
+import com.example.zomnieapp.ui_app.data.model.RenderMapPoint;
+
 import java.util.List;
 
-public class RenderDataRepository {
+public interface RenderDataRepository {
 
-    private volatile OnNewDataListener onNewDataListener;
+    void listenToNewData(OnNewDataListener onNewDataListener);
 
-    private volatile RenderData currentData = new RenderData(new ArrayList<String>(), new ArrayList<Color>());
+    void onNewMap(List<List<RenderMapPoint>> map);
 
-    public void listenToNewData(OnNewDataListener onNewDataListener) {
-        this.onNewDataListener = onNewDataListener;
-    }
+    void onNewPlayerStatus(PlayerStatus generatePlayerStatus);
 
-    public RenderData getCurrentData() {
-        return currentData;
-    }
+    interface OnNewDataListener {
 
-    public void newTexts(List<String> texts) {
-        RenderData newData = new RenderData(texts, currentData.getColors());
-        currentData = newData;
-        onNewDataListener.newData(newData);
+        void newMap(List<List<RenderMapPoint>> map);
+        void newPlayer(PlayerStatus playerStatus);
     }
 }

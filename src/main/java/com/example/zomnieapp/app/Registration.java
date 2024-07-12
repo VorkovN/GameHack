@@ -8,10 +8,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
-
-import static com.example.zomnieapp.ui_app.MainFrame.dataRepository;
-
 @Component
 public class Registration {
 
@@ -32,7 +28,6 @@ public class Registration {
             System.out.println(requestEntity.hashCode());
             String data = responseEntity.getBody();
             System.out.println(data);
-            dataRepository.newTexts(Collections.singletonList(data));
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 completedRegistration = true;
@@ -44,7 +39,6 @@ public class Registration {
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             String data = "HTTP Status Code: " + e.getStatusCode() +"\n" +"HTTP Response Body: " + e.getResponseBodyAsString();
             System.out.println(data);
-            dataRepository.newTexts(Collections.singletonList(data));
             return false;
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
