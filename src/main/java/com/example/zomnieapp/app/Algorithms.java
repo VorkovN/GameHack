@@ -82,9 +82,9 @@ public class Algorithms {
 
         // Распределяем атаку баз по зомби
         for (Zombie zombie : zombieList) {
-            if (!isZombieComingToUs(centerPoint, zombie)) {
-                continue;
-            }
+//            if (!isZombieComingToUs(centerPoint, zombie)) {
+//                continue;
+//            }
 
             while (baseIterator.hasNext()) {
                 Base base = baseIterator.next();
@@ -94,6 +94,7 @@ public class Algorithms {
 
                 attacks.add(new Attack(base.getId(), new Target(zombie.getX(), zombie.getY())));
                 ++zombie_counter;
+                zombie.setHealth(zombie.getHealth() - base.getRange());
                 baseIterator.remove();
                 if (zombie.getHealth() <= 0) {
                     break;
@@ -112,6 +113,7 @@ public class Algorithms {
 
                 attacks.add(new Attack(base.getId(), new Target(enemyBlocks.getX(), enemyBlocks.getY())));
                 ++enemy_counter;
+                enemyBlocks.setHealth(enemyBlocks.getHealth() - base.getRange());
                 baseIterator.remove();
                 if (enemyBlocks.getHealth() <= 0) {
                     break;
