@@ -71,8 +71,8 @@ public class Algorithms {
         enemyBlocksList.sort(Comparator.comparingDouble(enemyBlock -> distance(enemyBlock.getX(), enemyBlock.getY(), centerPoint.getX(), centerPoint.getY())));
         cells.sort(Comparator.comparingDouble(cell -> distance(cell.getX(), cell.getY(), centerPoint.getX(), centerPoint.getY())));
 
-        System.out.println("enemyBlocksList.size: " + zombieList.size());
-        System.out.println("enemyBlocksList.size: " + basesList.size());
+        System.out.println("zombieList.size: " + zombieList.size());
+        System.out.println("basesList.size: " + basesList.size());
         System.out.println("enemyBlocksList.size: " + enemyBlocksList.size());
 
         int zombie_counter = 0;
