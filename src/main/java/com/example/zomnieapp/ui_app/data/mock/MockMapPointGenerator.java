@@ -1,9 +1,9 @@
 package com.example.zomnieapp.ui_app.data.mock;
 
+import com.example.zomnieapp.ui_app.data.mock.model.MockMapPoint;
 import com.example.zomnieapp.ui_app.data.model.Coordinate;
 import com.example.zomnieapp.ui_app.data.model.MapPointType;
 import com.example.zomnieapp.ui_app.data.model.MapSubject;
-import com.example.zomnieapp.ui_app.data.model.RenderMapPoint;
 import com.example.zomnieapp.ui_app.data.model.base.BaseSubject;
 import com.example.zomnieapp.ui_app.data.model.enemy.EnemyBaseSubject;
 import com.example.zomnieapp.ui_app.data.model.zombie.ZombieDirection;
@@ -13,11 +13,11 @@ import com.example.zomnieapp.ui_app.data.model.zombie.ZombieType;
 import java.util.Random;
 import java.util.UUID;
 
-public class RenderMapPointGenerator {
+public class MockMapPointGenerator {
 
     private final Random random = new Random();
 
-    public RenderMapPoint generateRenderMapPoint(Coordinate coordinate) {
+    public MockMapPoint generateMockMapPoint(Coordinate coordinate) {
         int rand = random.nextInt(100);
         MapPointType type;
         if (rand < 5) {
@@ -27,8 +27,7 @@ public class RenderMapPointGenerator {
         }
         MapSubject subject = generateRandomSubject(coordinate);
 
-        RenderMapPoint renderMapPoint = new RenderMapPoint(type, subject);
-        return renderMapPoint;
+        return new MockMapPoint(type, subject);
     }
 
     private MapSubject generateRandomSubject(Coordinate coordinate) {

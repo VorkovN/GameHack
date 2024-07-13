@@ -1,18 +1,28 @@
 package com.example.zomnieapp.ui_app.data.mock;
 
-import static com.example.zomnieapp.ui_app.MainFrame.dataRepository;
+import com.example.zomnieapp.ui_app.data.model.Coordinate;
+import com.example.zomnieapp.ui_app.data.model.VisibleMapPoint;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.example.zomnieapp.ui_app.ui.MainFrame.dataRepository;
 
 public class GameEngine {
 
-    private final DataGenerator dataGenerator = new DataGenerator();
 
-    public static int width = 40;
-    public static int height = 100;
+    public static int width = 1000;
+    public static int height = 1000;
+    private final DataGenerator dataGenerator = new DataGenerator(width, height);
 
     public void startGame() {
         Thread mapThread = new Thread(() -> {
+            Set<Coordinate> visibleCoordinates = new HashSet<>();
             while (true) {
-                dataRepository.onNewMap(dataGenerator.generateMap(width, height));
+                visibleCoordinates = dataGenerator.generateVisibleCoordinates(visibleCoordinates);
+                List<VisibleMapPoint> visibleMapPoints = dataGenerator.generateMap(width, height, visibleCoordinates, 10);
+                dataRepository.onNewMap(visibleMapPoints);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

@@ -1,6 +1,6 @@
 package com.example.zomnieapp;
 
-import com.example.zomnieapp.ui_app.MainFrame;
+import com.example.zomnieapp.ui_app.ui.MainFrame;
 import com.example.zomnieapp.ui_app.data.mock.GameThread;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

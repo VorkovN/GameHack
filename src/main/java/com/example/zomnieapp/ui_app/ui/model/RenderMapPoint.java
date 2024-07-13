@@ -1,5 +1,7 @@
-package com.example.zomnieapp.ui_app.data.model;
+package com.example.zomnieapp.ui_app.ui.model;
 
+import com.example.zomnieapp.ui_app.data.model.MapPointType;
+import com.example.zomnieapp.ui_app.data.model.MapSubject;
 import com.example.zomnieapp.ui_app.data.model.base.BaseSubject;
 import com.example.zomnieapp.ui_app.data.model.enemy.EnemyBaseSubject;
 import com.example.zomnieapp.ui_app.data.model.zombie.ZombieSubject;
@@ -14,9 +16,12 @@ public class RenderMapPoint {
 
     private MapSubject subject;
 
-    public RenderMapPoint(MapPointType type, MapSubject subject) {
+    private boolean visible;
+
+    public RenderMapPoint(MapPointType type, MapSubject subject, boolean visible) {
         this.type = type;
         this.subject = subject;
+        this.visible = visible;
     }
 
     public Color getColor() {
@@ -28,8 +33,9 @@ public class RenderMapPoint {
             return Color.BLUE;
         } else if (subject instanceof ZombieSubject) {
             return Color.GREEN;
-        }
-        else {
+        } else if (visible) {
+            return Color.LIGHT_GRAY;
+        } else {
             return Color.WHITE;
         }
     }
@@ -39,6 +45,7 @@ public class RenderMapPoint {
         return "RenderMapPoint{" +
                 "type=" + type +
                 ", subject=" + subject +
+                ", visible=" + visible +
                 '}';
     }
 }

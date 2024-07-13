@@ -1,6 +1,6 @@
 package com.example.zomnieapp.ui_app.mapper;
 
-import com.example.zomnieapp.ui_app.data.model.RenderMapPoint;
+import com.example.zomnieapp.ui_app.ui.model.RenderMapPoint;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -1,11 +1,11 @@
-package com.example.zomnieapp.ui_app;
+package com.example.zomnieapp.ui_app.ui;
 
-import com.example.zomnieapp.ui_app.common.GridPanel;
 import com.example.zomnieapp.ui_app.data.RenderDataRepository;
 import com.example.zomnieapp.ui_app.data.model.PlayerStatus;
-import com.example.zomnieapp.ui_app.data.model.RenderMapPoint;
 import com.example.zomnieapp.ui_app.data.real.RenderDataRepositoryImpl;
 import com.example.zomnieapp.ui_app.mapper.MapMapper;
+import com.example.zomnieapp.ui_app.ui.common.GridPanel;
+import com.example.zomnieapp.ui_app.ui.model.RenderMapPoint;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -32,8 +32,8 @@ public class MainFrame extends JFrame {
         initUI();
         dataRepository.listenToNewData(new RenderDataRepository.OnNewDataListener() {
             @Override
-            public void newMap(List<List<RenderMapPoint>> map) {
-                showMap(MapMapper.mapToColors(map));
+            public void newMap(List<List<RenderMapPoint>> points) {
+                showMap(MapMapper.mapToColors(points));
             }
 
             @Override

@@ -1,4 +1,4 @@
-package com.example.zomnieapp.ui_app.common;
+package com.example.zomnieapp.ui_app.ui.common;
 
 import javax.swing.*;
 import java.awt.*;
