@@ -125,7 +125,7 @@ public class Algorithms {
         Iterator<Cell> cellIterator = cells.iterator();
         while (coins > 0 && cellIterator.hasNext()) {
             Cell cell = cellIterator.next();
-            if (ceenemy_counterll.getType().equals("free")) {
+            if (cell.getType().equals("free")) {
                 --coins;
                 builds.add(new Build(cell.getX(), cell.getY()));
             }
