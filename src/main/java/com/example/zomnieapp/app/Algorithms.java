@@ -17,46 +17,80 @@ public class Algorithms {
 
     public static final int WIDTH_MAP = 100;
 
-    public static ArrayList<Cell> buildMap(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, List<Zpot> zpotList, Point centerPoint) {
+    public static TreeMap<Point, Cell> buildMap(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, List<Zpot> zpotList, Point centerPoint) {
 
-        ArrayList<Cell> cells = generateGrid(centerPoint); // Генерим свою пустую карту вокруг центральной точки
+        TreeMap<Point, Cell> cells = generateGrid(centerPoint); // Генерим свою пустую карту вокруг центральной точки
 
         // Вписываем в нашу локальную карту зомбаков
         for (Zombie zombie : zombieList) {
-            for (Cell cell: cells) {
-                if (zombie.getX() == cell.getX() && zombie.getY() == cell.getY()) {
-                    cell.setType("zombie");
-                    break;
-                }
+            Cell cell = cells.get(new Point(zombie.getX(), zombie.getY()));
+            if (cell != null) {
+                cell.setType("zombie");
             }
         }
 
         // Вписываем в нашу локальную карту базы
         for (Base base : basesList) {
-            for (Cell cell: cells) {
-                if (base.getX() == cell.getX() && base.getY() == cell.getY()) {
-                    cell.setType("base");
-                    break;
-                }
+            Cell cell = cells.get(new Point(base.getX(), base.getY()));
+            if (cell != null) {
+                cell.setType("base");
             }
         }
 
         // Вписываем в нашу локальную карту базы противника
         for (EnemyBlock enemyBlock : enemyBlocksList) {
-            for (Cell cell: cells) {
-                if (enemyBlock.getX() == cell.getX() && enemyBlock.getY() == cell.getY()) {
-                    cell.setType("enemyBlock");
-                    break;
+            Cell cell = cells.get(new Point(enemyBlock.getX(), enemyBlock.getY()));
+            if (cell != null) {
+                cell.setType("enemyBlock");
+
+                Cell cell_up = cells.get(new Point(enemyBlock.getX(), enemyBlock.getY()+1));
+                if (cell_up != null && Objects.equals(cell_up.getType(), "free")) {
+                    cell_up.setType("no_build");
+                }
+
+                Cell cell_down = cells.get(new Point(enemyBlock.getX(), enemyBlock.getY()-1));
+                if (cell_down != null && Objects.equals(cell_down.getType(), "free")) {
+                    cell_down.setType("no_build");
+                }
+
+                Cell cell_right = cells.get(new Point(enemyBlock.getX()+1, enemyBlock.getY()));
+                if (cell_right != null && Objects.equals(cell_right.getType(), "free")) {
+                    cell_right.setType("no_build");
+                }
+
+                Cell cell_left = cells.get(new Point(enemyBlock.getX()-1, enemyBlock.getY()));
+                if (cell_left != null && Objects.equals(cell_left.getType(), "free")) {
+                    cell_left.setType("no_build");
                 }
             }
         }
 
         // Вписываем в нашу локальную карту базы противника
         for (Zpot zpot : zpotList) {
-            for (Cell cell: cells) {
-                if (zpot.getX() == cell.getX() && zpot.getY() == cell.getY()) {
-                    cell.setType(zpot.getType());
-                    break;
+            Cell cell = cells.get(new Point(zpot.getX(), zpot.getY()));
+            if (cell != null) {
+                cell.setType(zpot.getType());
+
+                if (Objects.equals(zpot.getType(), "default")) {
+                    Cell cell_up = cells.get(new Point(zpot.getX(), zpot.getY()+1));
+                    if (cell_up != null && Objects.equals(cell_up.getType(), "free")) {
+                        cell_up.setType("no_build");
+                    }
+
+                    Cell cell_down = cells.get(new Point(zpot.getX(), zpot.getY()-1));
+                    if (cell_down != null && Objects.equals(cell_down.getType(), "free")) {
+                        cell_down.setType("no_build");
+                    }
+
+                    Cell cell_right = cells.get(new Point(zpot.getX()+1, zpot.getY()));
+                    if (cell_right != null && Objects.equals(cell_right.getType(), "free")) {
+                        cell_right.setType("no_build");
+                    }
+
+                    Cell cell_left = cells.get(new Point(zpot.getX()-1, zpot.getY()));
+                    if (cell_left != null && Objects.equals(cell_left.getType(), "free")) {
+                        cell_left.setType("no_build");
+                    }
                 }
             }
         }
@@ -69,7 +103,7 @@ public class Algorithms {
         zombieList.sort(Comparator.comparingDouble(zombie -> distance(zombie.getX(), zombie.getY(), centerPoint.getX(), centerPoint.getY())));
         basesList.sort(Comparator.comparingDouble(base -> distance(base.getX(), base.getY(), centerPoint.getX(), centerPoint.getY())));
         enemyBlocksList.sort(Comparator.comparingDouble(enemyBlock -> distance(enemyBlock.getX(), enemyBlock.getY(), centerPoint.getX(), centerPoint.getY())));
-        cells.sort(Comparator.comparingDouble(cell -> distance(cell.getX(), cell.getY(), centerPoint.getX(), centerPoint.getY())));
+//        cells.sort(Comparator.comparingDouble(cell -> distance(cell.getX(), cell.getY(), centerPoint.getX(), centerPoint.getY())));
 
         System.out.println("zombieList.size: " + zombieList.size());
         System.out.println("basesList.size: " + basesList.size());
@@ -82,9 +116,9 @@ public class Algorithms {
 
         // Распределяем атаку баз по зомби
         for (Zombie zombie : zombieList) {
-            if (!isZombieComingToUs(centerPoint, zombie)) {
-                continue;
-            }
+//            if (!isZombieComingToUs(centerPoint, zombie)) {
+//                continue;
+//            }
 
             while (baseIterator.hasNext()) {
                 Base base = baseIterator.next();
@@ -135,12 +169,23 @@ public class Algorithms {
         return new BodyCommand(attacks, builds, null);
     }
 
-    public static ArrayList<Cell> generateGrid(Point point) {
+    public static TreeMap<Point, Cell> generateGrid(Point point) {
         int grid_size = WIDTH_MAP / 2; // Половина размера сетки
-        ArrayList<Cell> grid = new ArrayList<>();
+
+        Comparator<Point> comparator = new Comparator<Point>() {
+            @Override
+            public int compare(Point p1, Point p2) {
+                double distance1 = p1.distance(0, 0);
+                double distance2 = p2.distance(0, 0);
+
+                return Double.compare(distance1, distance2);
+            }
+        };
+
+        TreeMap<Point, Cell> grid = new TreeMap<>(comparator);
         for (int x = point.x - grid_size; x < point.x + grid_size; x++) {
             for (int y = point.y - grid_size; y < point.y + grid_size; y++) {
-                grid.add(new Cell("free", x, y));
+                grid.put(new Point(x, y), new Cell("free", x, y));
             }
         }
 

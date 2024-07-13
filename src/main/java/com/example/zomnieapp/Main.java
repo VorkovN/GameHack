@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 @Component
 @AllArgsConstructor
@@ -37,6 +38,10 @@ public class Main {
 
         // основная логика
         int turnEndsInMs = unitsService.getTurnEndsInMs();
+        if (turnEndsInMs < 1000) {
+            return;
+        }
+
         List<Zpot> zpotList = worldService.getZpots();
         Player player = unitsService.getPlayer();
         List<Zombie> zombieList = unitsService.getZombies();
@@ -45,21 +50,24 @@ public class Main {
         Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElseThrow(() -> new RuntimeException("Head base not found"));
         Point centerPoint = new Point(headBase.getX(), headBase.getY());
 
-        if (turnEndsInMs < 1000) {
-            return;
-        }
+
 
         System.out.println(centerPoint);
-        System.out.println("turnEndsInMs: " + turnEndsInMs);
+        System.out.println("turnEndsInMs_START: " + turnEndsInMs);
         System.out.println("EnemyBlockKills: " + player.getEnemyBlockKills());
         System.out.println("Gold: " + player.getGold());
         System.out.println("Points: " + player.getPoints());
         System.out.println("ZombieKills: " + player.getZombieKills());
 
-        ArrayList<Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
-        logicToGui.execute(cells);
-        BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, enemyBlockList, cells, centerPoint, player.getGold());
+        TreeMap<Point, Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
+        ArrayList<Cell> cellList = new ArrayList<>(cells.values());
+
+        logicToGui.execute(cellList);
+        BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, enemyBlockList, cellList, centerPoint, player.getGold());
         command.execute(bodyCommand);
+
+        unitsService.getResponseAndInit();
+        System.out.println("turnEndsInMs_END: " + unitsService.getTurnEndsInMs());
     }
 
     private void initServices() {

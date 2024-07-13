@@ -55,6 +55,7 @@ public class LogicToGui {
             case "base" : return MapPointType.BASE;
             case "enemyBlock" : return MapPointType.ENEMY_BLOCK;
             case "free" : return MapPointType.FREE;
+            case "no_build" : return MapPointType.NO_BUILD;
             default: throw new RuntimeException("Unknown cell type for visual: " + cellType);
         }
     }

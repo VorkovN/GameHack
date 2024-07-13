@@ -6,7 +6,8 @@ public enum MapPointType {
     BASE,
     ENEMY_BLOCK,
     FREE,
-    ZOMBIE
+    ZOMBIE,
+    NO_BUILD
 
     // "zombie", "wall", "default", "base", "enemyBlock", "free"
 }
