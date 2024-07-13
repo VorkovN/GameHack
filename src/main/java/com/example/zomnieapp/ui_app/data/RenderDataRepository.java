@@ -10,7 +10,7 @@ public interface RenderDataRepository {
 
     void listenToNewData(OnNewDataListener onNewDataListener);
 
-    void onNewMap(List<VisibleMapPoint> points);
+    void onNewMap(int fullMapWidth, int fullMapHeight,List<VisibleMapPoint> points);
 
     void onNewPlayerStatus(PlayerStatus generatePlayerStatus);
 

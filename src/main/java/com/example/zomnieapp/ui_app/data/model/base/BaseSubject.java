@@ -52,7 +52,7 @@ public class BaseSubject implements MapSubject {
 
     @Override
     public String toString() {
-        return "EnemyBaseResponse{" +
+        return "Base{" +
                 "attack=" + attack +
                 ", health=" + health +
                 ", isHead=" + isHead +

@@ -22,7 +22,7 @@ public class GameEngine {
             while (true) {
                 visibleCoordinates = dataGenerator.generateVisibleCoordinates(visibleCoordinates);
                 List<VisibleMapPoint> visibleMapPoints = dataGenerator.generateMap(width, height, visibleCoordinates, 10);
-                dataRepository.onNewMap(visibleMapPoints);
+                dataRepository.onNewMap(width, height, visibleMapPoints);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

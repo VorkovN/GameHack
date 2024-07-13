@@ -48,4 +48,16 @@ public class RenderMapPoint {
                 ", visible=" + visible +
                 '}';
     }
+
+    public MapPointType getType() {
+        return type;
+    }
+
+    public MapSubject getSubject() {
+        return subject;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
 }

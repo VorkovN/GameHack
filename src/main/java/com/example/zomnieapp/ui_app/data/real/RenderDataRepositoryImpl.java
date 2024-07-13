@@ -23,8 +23,8 @@ public class RenderDataRepositoryImpl implements RenderDataRepository {
     }
 
     @Override
-    public void onNewMap(List<VisibleMapPoint> points) {
-        tryEmitNewMap(convertToRenderMap(points));
+    public void onNewMap(int fullMapWidth, int fullMapHeight, List<VisibleMapPoint> points) {
+        tryEmitNewMap(convertToRenderMap(fullMapWidth, fullMapHeight, points));
     }
 
     @Override
@@ -40,7 +40,7 @@ public class RenderDataRepositoryImpl implements RenderDataRepository {
         }
     }
 
-    public static List<List<RenderMapPoint>> convertToRenderMap(List<VisibleMapPoint> visibleMapPoints) {
+    public static List<List<RenderMapPoint>> convertToRenderMap(int fullMapWidth, int fullMapHeight, List<VisibleMapPoint> visibleMapPoints) {
 
         // Найти минимальные и максимальные координаты для смещения
         int minX = Integer.MAX_VALUE;

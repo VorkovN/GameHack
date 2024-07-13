@@ -3,7 +3,6 @@ package com.example.zomnieapp.ui_app.ui;
 import com.example.zomnieapp.ui_app.data.RenderDataRepository;
 import com.example.zomnieapp.ui_app.data.model.PlayerStatus;
 import com.example.zomnieapp.ui_app.data.real.RenderDataRepositoryImpl;
-import com.example.zomnieapp.ui_app.mapper.MapMapper;
 import com.example.zomnieapp.ui_app.ui.common.GridPanel;
 import com.example.zomnieapp.ui_app.ui.model.RenderMapPoint;
 import org.springframework.stereotype.Component;
@@ -18,14 +17,12 @@ public class MainFrame extends JFrame {
 
     public static volatile RenderDataRepository dataRepository = new RenderDataRepositoryImpl();
 
-    private JPanel textPanel;
     private GridPanel gridPanel;
-    private JTable playerStatusTable;
     private DefaultTableModel tableModel;
 
     public MainFrame() {
         setTitle("Spring Boot with Swing");
-        setSize(800, 600);
+        setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -33,7 +30,7 @@ public class MainFrame extends JFrame {
         dataRepository.listenToNewData(new RenderDataRepository.OnNewDataListener() {
             @Override
             public void newMap(List<List<RenderMapPoint>> points) {
-                showMap(MapMapper.mapToColors(points));
+                showMap(points);
             }
 
             @Override
@@ -44,19 +41,26 @@ public class MainFrame extends JFrame {
     }
 
     private void initUI() {
-        textPanel = new JPanel();
+        JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
-        gridPanel = new GridPanel(1, 1);
+        // Инициализация таблицы для отображения информации об объекте
+        String[] infoColumnNames = {"Property", "Value"};
+        DefaultTableModel infoTableModel = new DefaultTableModel(infoColumnNames, 0);
+        JTable infoTable = new JTable(infoTableModel);
+        JScrollPane infoScrollPane = new JScrollPane(infoTable);
+
+        gridPanel = new GridPanel(1, 1, infoTableModel);
 
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(textPanel, BorderLayout.NORTH);
         getContentPane().add(gridPanel, BorderLayout.CENTER);
+        getContentPane().add(infoScrollPane, BorderLayout.EAST);
 
         // Инициализация таблицы
         String[] columnNames = {"Name", "Enemy Block Kills", "Game Ended At", "Gold", "Points", "Zombie Kills"};
         tableModel = new DefaultTableModel(columnNames, 0);
-        playerStatusTable = new JTable(tableModel);
+        JTable playerStatusTable = new JTable(tableModel);
         playerStatusTable.setFillsViewportHeight(true);
 
         JScrollPane scrollPane = new JScrollPane(playerStatusTable);
@@ -64,15 +68,20 @@ public class MainFrame extends JFrame {
         getContentPane().add(scrollPane, BorderLayout.SOUTH);
     }
 
-    private void showMap(List<List<Color>> colors) {
-        int rows = colors.size();
-        int cols = colors.get(0).size();
-        gridPanel.resizeGrid(rows, cols);
+    private void showMap(List<List<RenderMapPoint>> points) {
+        int rows = points.size();
+        int cols = points.get(0).size();
+        gridPanel.resizeGrid(rows, cols, points);
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 java.awt.Component component = gridPanel.getComponent(row * cols + col);
-                component.setBackground(colors.get(row).get(col));
+                RenderMapPoint point = points.get(row).get(col);
+                if (point != null) {
+                    component.setBackground(point.getColor());
+                } else {
+                    component.setBackground(Color.WHITE);
+                }
             }
         }
 
