@@ -7,6 +7,7 @@ import com.example.zomnieapp.units.Player;
 import com.example.zomnieapp.units.Zombie;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,8 +17,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
 
 @Component
 public class UnitsService {
@@ -30,7 +29,7 @@ public class UnitsService {
     }
 
     public List<Zombie> getZombies() {
-        List<Zombie> zombieList = new ArrayList<>();
+        List<Zombie> zombieList = new LinkedList<>();
         try {
             HttpHeaders headers = HeaderConfig.getAuthHeader();
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -57,7 +56,7 @@ public class UnitsService {
     }
 
     public List<Base> getBases() {
-        List<Base> baseList = new ArrayList<>();
+        List<Base> baseList = new LinkedList<>();
         try {
             HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
             ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
@@ -72,6 +71,7 @@ public class UnitsService {
                 Base base = new Base(
                         baseJson.path("id").asText(),
                         baseJson.path("isHead").asBoolean(),
+                        baseJson.path("range").asInt(),
                         baseJson.path("x").asInt(),
                         baseJson.path("y").asInt()
                 );
@@ -84,7 +84,7 @@ public class UnitsService {
     }
 
     public List<EnemyBlock> getEnemyBlocks() {
-        List<EnemyBlock> enemyBlockList = new ArrayList<>();
+        List<EnemyBlock> enemyBlockList = new LinkedList<>();
         try {
             HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
             ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);

@@ -8,6 +8,7 @@ import lombok.Getter;
 public class Base {
     private String id;
     private boolean isHead;
+    private int range;
     private int x;
     private int y;
 }

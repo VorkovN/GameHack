@@ -7,10 +7,8 @@ import com.example.zomnieapp.body.Target;
 import com.example.zomnieapp.units.*;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
-import java.util.Iterator;
 
 import static java.awt.geom.Point2D.distance;
 
@@ -73,18 +71,22 @@ public class Algorithms {
         List<Attack> attacks = new ArrayList<>();
 
         // Распределяем атаку баз по зомби
-        Iterator<Zombie> zombieIterator = zombieList.iterator();
-        Iterator<Base> baseIterator = basesList.iterator();
-        while (zombieIterator.hasNext() && baseIterator.hasNext()) {
-            Zombie zombie = zombieIterator.next();
+
+
+        for (Zombie zombie : zombieList) {
             if (!isZombieComingToUs(centerPoint, zombie)) {
                 continue;
             }
 
+            Iterator<Base> baseIterator = basesList.iterator();
             while (baseIterator.hasNext()) {
                 Base base = baseIterator.next();
-                // todo проверить дотягивается ли база, если нет, то добавить в список для переиспользования. Но стоит учесть момент, когда остался зомби и несколько баз, которые не могут дотянуться до зомби
+                if (distance(base.getX(), base.getY(), zombie.getX(), zombie.getY()) > base.getRange()) {
+                    continue;
+                }
+
                 attacks.add(new Attack(base.getId(), new Target(zombie.getX(), zombie.getY())));
+                baseIterator.remove();
                 if (zombie.getHealth() <= 0) {
                     break;
                 }
