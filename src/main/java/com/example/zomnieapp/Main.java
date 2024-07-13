@@ -36,6 +36,7 @@ public class Main {
         initServices();
 
         // основная логика
+        int turnEndsInMs = unitsService.getTurnEndsInMs();
         List<Zpot> zpotList = worldService.getZpots();
         Player player = unitsService.getPlayer();
         List<Zombie> zombieList = unitsService.getZombies();
@@ -43,7 +44,13 @@ public class Main {
         List<EnemyBlock> enemyBlockList = unitsService.getEnemyBlocks();
         Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElseThrow(() -> new RuntimeException("Head base not found"));
         Point centerPoint = new Point(headBase.getX(), headBase.getY());
+
+        if (turnEndsInMs < 1000) {
+            return;
+        }
+
         System.out.println(centerPoint);
+        System.out.println("turnEndsInMs: " + turnEndsInMs);
         System.out.println("EnemyBlockKills: " + player.getEnemyBlockKills());
         System.out.println("Gold: " + player.getGold());
         System.out.println("Points: " + player.getPoints());

@@ -15,7 +15,7 @@ import static java.awt.geom.Point2D.distance;
 
 public class Algorithms {
 
-    public static final int WIDTH_MAP = 200;
+    public static final int WIDTH_MAP = 100;
 
     public static ArrayList<Cell> buildMap(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, List<Zpot> zpotList, Point centerPoint) {
 

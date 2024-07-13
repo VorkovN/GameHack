@@ -123,4 +123,16 @@ public class UnitsService {
         }
         return player;
     }
+
+    public int getTurnEndsInMs() {
+        int turnEndsInMs = -1;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            turnEndsInMs = rootNode.path("turnEndsInMs").asInt();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return turnEndsInMs;
+    }
 }
