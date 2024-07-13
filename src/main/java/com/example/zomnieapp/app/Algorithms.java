@@ -65,14 +65,31 @@ public class Algorithms {
     }
 
 
-    public static BodyCommand generateCommand(List<Zombie> zombieList, List<Base> basesList, List<Cell> cells, Point centerPoint, int coins) {
+    public static BodyCommand generateCommand(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, List<Cell> cells, Point centerPoint, int coins) {
         zombieList.sort(Comparator.comparingDouble(zombie -> distance(zombie.getX(), zombie.getY(), centerPoint.getX(), centerPoint.getY())));
         basesList.sort(Comparator.comparingDouble(base -> distance(base.getX(), base.getY(), centerPoint.getX(), centerPoint.getY())));
+        enemyBlocksList.sort(Comparator.comparingDouble(enemyBlock -> distance(enemyBlock.getX(), enemyBlock.getY(), centerPoint.getX(), centerPoint.getY())));
         cells.sort(Comparator.comparingDouble(cell -> distance(cell.getX(), cell.getY(), centerPoint.getX(), centerPoint.getY())));
 
         List<Attack> attacks = new ArrayList<>();
 
         // Распределяем атаку баз по зомби
+        Iterator<Base> baseIterator = basesList.iterator();
+
+        for (EnemyBlock enemyBlocks : enemyBlocksList) {
+            while (baseIterator.hasNext()) {
+                Base base = baseIterator.next();
+                if (distance(base.getX(), base.getY(), enemyBlocks.getX(), enemyBlocks.getY()) > base.getRange()) {
+                    continue;
+                }
+
+                attacks.add(new Attack(base.getId(), new Target(enemyBlocks.getX(), enemyBlocks.getY())));
+                baseIterator.remove();
+                if (enemyBlocks.getHealth() <= 0) {
+                    break;
+                }
+            }
+        }
 
 
         for (Zombie zombie : zombieList) {
@@ -80,7 +97,6 @@ public class Algorithms {
                 continue;
             }
 
-            Iterator<Base> baseIterator = basesList.iterator();
             while (baseIterator.hasNext()) {
                 Base base = baseIterator.next();
                 if (distance(base.getX(), base.getY(), zombie.getX(), zombie.getY()) > base.getRange()) {

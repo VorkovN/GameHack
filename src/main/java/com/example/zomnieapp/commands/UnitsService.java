@@ -96,6 +96,7 @@ public class UnitsService {
 
             for (JsonNode enemyBlocksJson : enemyBlocksNode) {
                 EnemyBlock enemyBlock = new EnemyBlock(
+                        enemyBlocksJson.path("health").asInt(),
                         enemyBlocksJson.path("x").asInt(),
                         enemyBlocksJson.path("y").asInt()
                 );
