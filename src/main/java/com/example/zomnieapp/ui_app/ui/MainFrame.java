@@ -22,7 +22,7 @@ public class MainFrame extends JFrame {
     private DefaultTableModel infoTableModel;
 
     public MainFrame() {
-        setTitle("Spring Boot with Swing");
+        setTitle("Глаза боятся, а руки делают");
         setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
