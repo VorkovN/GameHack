@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 @Component
 @AllArgsConstructor
@@ -33,10 +34,20 @@ public class Main {
 //        if (!isSuccessfulReg) {
 //            return;
 //        }
+        long startTime = System.currentTimeMillis();
+
         initServices();
 
         // основная логика
         int turnEndsInMs = unitsService.getTurnEndsInMs();
+        if (turnEndsInMs < 1000) {
+            return;
+        }
+
+        System.out.println("----Start-----");
+        System.out.println("Start at time : " + startTime);
+
+
         List<Zpot> zpotList = worldService.getZpots();
         Player player = unitsService.getPlayer();
         List<Zombie> zombieList = unitsService.getZombies();
@@ -45,21 +56,23 @@ public class Main {
         Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElseThrow(() -> new RuntimeException("Head base not found"));
         Point centerPoint = new Point(headBase.getX(), headBase.getY());
 
-        if (turnEndsInMs < 1000) {
-            return;
-        }
-
         System.out.println(centerPoint);
-        System.out.println("turnEndsInMs: " + turnEndsInMs);
+        System.out.println("turnEndsInMs_START: " + turnEndsInMs);
         System.out.println("EnemyBlockKills: " + player.getEnemyBlockKills());
         System.out.println("Gold: " + player.getGold());
         System.out.println("Points: " + player.getPoints());
         System.out.println("ZombieKills: " + player.getZombieKills());
 
-        ArrayList<Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
-//        logicToGui.execute(cells);
+        TreeMap<Point, Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
+
+        logicToGui.execute(cells);
         BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, enemyBlockList, cells, centerPoint, player.getGold());
         command.execute(bodyCommand);
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("End at time : " + endTime);
+        System.out.println("Time taken mills: " + (endTime - startTime));
+        System.out.println("----End-----");
     }
 
     private void initServices() {

@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import static com.example.zomnieapp.ZomnieAppApplication.HOST_URL;
+
 @Component
 public class Command {
 
-    private static final String URL = "https://games.datsteam.dev/play/zombidef/command";
+    private static final String URL = HOST_URL + "/play/zombidef/command";
     private final RestTemplate restTemplate;
     private final Gson gson;
 
@@ -29,6 +31,7 @@ public class Command {
             System.out.println(gsonBody);
             HttpEntity<String> requestEntity = new HttpEntity<>(gsonBody, headers);
             ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.POST, requestEntity, String.class); //
+            System.out.println(responseEntity.getBody());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

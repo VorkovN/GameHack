@@ -14,10 +14,12 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.zomnieapp.ZomnieAppApplication.HOST_URL;
+
 @Component
 public class WorldService {
 
-    private static final String URL = "https://games.datsteam.dev/play/zombidef/world";
+    private static final String URL = HOST_URL + "/play/zombidef/world";
     private final RestTemplate restTemplate;
     private String responseBody;
 

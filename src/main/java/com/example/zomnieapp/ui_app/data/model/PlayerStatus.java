@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 
 public class PlayerStatus {
     private final int enemyBlockKills;
-    private final LocalDateTime gameEndedAt;
+    private final String gameEndedAt;
     private final int gold;
     private final String name;
     private final int points;
     private final int zombieKills;
 
-    public PlayerStatus(int enemyBlockKills, LocalDateTime gameEndedAt, int gold, String name, int points, int zombieKills) {
+    public PlayerStatus(int enemyBlockKills, String gameEndedAt, int gold, String name, int points, int zombieKills) {
         this.enemyBlockKills = enemyBlockKills;
         this.gameEndedAt = gameEndedAt;
         this.gold = gold;
@@ -23,7 +23,7 @@ public class PlayerStatus {
         return enemyBlockKills;
     }
 
-    public LocalDateTime getGameEndedAt() {
+    public String getGameEndedAt() {
         return gameEndedAt;
     }
 

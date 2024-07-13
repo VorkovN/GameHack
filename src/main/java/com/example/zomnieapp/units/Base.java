@@ -1,5 +1,6 @@
 package com.example.zomnieapp.units;
 
+import com.example.zomnieapp.ui_app.data.model.Coordinate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,4 +12,12 @@ public class Base {
     private int range;
     private int x;
     private int y;
+
+    private int attack;
+
+    private int health;
+
+    private String name;
+
+    private Coordinate lastAttack;
 }

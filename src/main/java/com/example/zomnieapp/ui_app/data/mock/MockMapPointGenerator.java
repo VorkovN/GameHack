@@ -38,7 +38,7 @@ public class MockMapPointGenerator {
             case 1:
                 return new BaseSubject(random.nextInt(100), random.nextInt(100), false, generateRandomCoordinate(), "another-user", coordinate.x, coordinate.y);
             case 2:
-                return new ZombieSubject(random.nextInt(100), ZombieDirection.UP, 13, UUID.randomUUID(), 3, ZombieType.FAST, 5, coordinate.x, coordinate.y);
+                return new ZombieSubject(random.nextInt(100), "up", 13, "12345", 3, "fast", 5, coordinate.x, coordinate.y);
             default:
                 return null;
         }

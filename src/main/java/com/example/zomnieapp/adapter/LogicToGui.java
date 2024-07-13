@@ -13,33 +13,42 @@ import com.example.zomnieapp.units.Cell;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Component
 @AllArgsConstructor
 public class LogicToGui {
     private final UnitsService unitsService;
 
-    public void execute(ArrayList<Cell> cells) {
+    public void execute(TreeMap<Point, Cell> cells) {
         visualizeMap(cells);
         visualizePlayerStatus();
     }
 
     private void visualizePlayerStatus() {
-        var originPlayer = unitsService.getPlayer();
-        var visualPlayer = new PlayerStatus(0, LocalDateTime.now(), originPlayer.getGold(), "name", 0, 0);
+        var player = unitsService.getPlayer();
+        var visualPlayer = new PlayerStatus(
+                player.getEnemyBlockKills(),
+                String.format("time: %s", unitsService.getTurnEndsInMs()),
+                player.getGold(),
+                "Nikitos",
+                player.getPoints(),
+                player.getZombieKills());
         MainFrame.dataRepository.onNewPlayerStatus(visualPlayer);
     }
 
-    private void visualizeMap(ArrayList<Cell> cells) {
+    private void visualizeMap(TreeMap<Point, Cell> cells) {
         List<VisibleMapPoint> visibleMapPoints = new ArrayList<>();
-        for (Cell cell : cells) {
+        for (Map.Entry<Point, Cell> entry : cells.entrySet()) {
             var vis = new VisibleMapPoint(
-                    convertToMapPointType(cell.getType()),
-                    null,
-                    new Coordinate(cell.getX(), cell.getY())
+                    convertToMapPointType(entry.getValue().getType()),
+                    entry.getValue().getMapSubject(),
+                    new Coordinate(entry.getValue().getX(), entry.getValue().getY())
             );
             visibleMapPoints.add(vis);
         }
@@ -55,6 +64,7 @@ public class LogicToGui {
             case "base" : return MapPointType.BASE;
             case "enemyBlock" : return MapPointType.ENEMY_BLOCK;
             case "free" : return MapPointType.FREE;
+            case "no_build" : return MapPointType.NO_BUILD;
             default: throw new RuntimeException("Unknown cell type for visual: " + cellType);
         }
     }
