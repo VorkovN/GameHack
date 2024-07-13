@@ -42,10 +42,8 @@ public class Main {
         Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElse(null);
         Point centerPoint = new Point(headBase.getX(), headBase.getY());
 
-        zombieList.sort(Comparator.comparingDouble(zombie -> distance(zombie.getX(), zombie.getY(), centerPoint.getX(), centerPoint.getY())));
-        basesList.sort(Comparator.comparingDouble(base -> distance(base.getX(), base.getY(), centerPoint.getX(), centerPoint.getY())));
-
         ArrayList<Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
+        //todo Отправить ване cells
         BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, cells, centerPoint, player.getGold());
 
         command.attackFromBases(bodyCommand); // передается ID база и Zombie id x id y

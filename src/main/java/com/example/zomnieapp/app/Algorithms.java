@@ -61,7 +61,6 @@ public class Algorithms {
             }
         }
 
-
         return cells;
     }
 
@@ -72,41 +71,26 @@ public class Algorithms {
         cells.sort(Comparator.comparingDouble(cell -> distance(cell.getX(), cell.getY(), centerPoint.getX(), centerPoint.getY())));
 
         List<Attack> attacks = new ArrayList<>();
-        { // Распределяем атаку баз по зомби
-            Iterator<Zombie> zombieIterator = zombieList.iterator();
-            Iterator<Base> baseIterator = basesList.iterator();
+
+        // Распределяем атаку баз по зомби
+        Iterator<Zombie> zombieIterator = zombieList.iterator();
+        Iterator<Base> baseIterator = basesList.iterator();
+        while (zombieIterator.hasNext() && baseIterator.hasNext()) {
             Zombie zombie = zombieIterator.next();
+            if (!isZombieComingToUs(centerPoint, zombie)) {
+                continue;
+            }
+
             while (baseIterator.hasNext()) {
                 Base base = baseIterator.next();
+                // todo проверить дотягивается ли база, если нет, то добавить в список для переиспользования. Но стоит учесть момент, когда остался зомби и несколько баз, которые не могут дотянуться до зомби
                 attacks.add(new Attack(base.getId(), new Target(zombie.getX(), zombie.getY())));
                 if (zombie.getHealth() <= 0) {
-                    if (!zombieIterator.hasNext()) {
-                        break;
-                    }
-                    zombie = zombieIterator.next();
+                    break;
                 }
             }
         }
 
-        { // Распределяем атаку баз по зомби
-            Iterator<Zombie> zombieIterator = zombieList.iterator();
-            Iterator<Base> baseIterator = basesList.iterator();
-            while (zombieIterator.hasNext() && baseIterator.hasNext()) {
-                Zombie zombie = zombieIterator.next();
-                if (!isZombieComingToUs(centerPoint, zombie)) {
-                    continue;
-                }
-
-                while (baseIterator.hasNext()) {
-                    Base base = baseIterator.next();
-                    attacks.add(new Attack(base.getId(), new Target(zombie.getX(), zombie.getY())));
-                    if (zombie.getHealth() <= 0) {
-                        break;
-                    }
-                }
-
-            }
-        }
 
         List<Build> builds = new ArrayList<>();
         Iterator<Cell> cellIterator = cells.iterator();
