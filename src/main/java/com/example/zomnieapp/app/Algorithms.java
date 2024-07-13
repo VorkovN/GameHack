@@ -4,10 +4,7 @@ import com.example.zomnieapp.body.Attack;
 import com.example.zomnieapp.body.BodyCommand;
 import com.example.zomnieapp.body.Build;
 import com.example.zomnieapp.body.Target;
-import com.example.zomnieapp.units.Base;
-import com.example.zomnieapp.units.EnemyBlock;
-import com.example.zomnieapp.units.Zombie;
-import com.example.zomnieapp.units.Cell;
+import com.example.zomnieapp.units.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,11 +15,11 @@ import java.util.Iterator;
 import static java.awt.geom.Point2D.distance;
 
 
-public class Algorithm {
+public class Algorithms {
 
-    public static ArrayList<Cell> buildMap(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, Point centerPoint) {
+    public static ArrayList<Cell> buildMap(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, List<Zpot> zpotList, Point centerPoint) {
 
-        ArrayList<Cell> cells = generateGrid(centerPoint);
+        ArrayList<Cell> cells = generateGrid(centerPoint); // Генерим свою пустую карту вокруг центральной точки
 
         // Вписываем в нашу локальную карту зомбаков
         for (Zombie zombie : zombieList) {
@@ -54,12 +51,22 @@ public class Algorithm {
             }
         }
 
+        // Вписываем в нашу локальную карту базы противника
+        for (Zpot zpot : zpotList) {
+            for (Cell cell: cells) {
+                if (zpot.getX() == cell.getX() && zpot.getY() == cell.getY()) {
+                    cell.setType(zpot.getType());
+                    break;
+                }
+            }
+        }
+
 
         return cells;
     }
 
 
-    public static BodyCommand generateCommand(List<Zombie> zombieList, List<Base> basesList, List<Cell> cells, Point centerPoint) {
+    public static BodyCommand generateCommand(List<Zombie> zombieList, List<Base> basesList, List<Cell> cells, Point centerPoint, int coins) {
         zombieList.sort(Comparator.comparingDouble(zombie -> distance(zombie.getX(), zombie.getY(), centerPoint.getX(), centerPoint.getY())));
         basesList.sort(Comparator.comparingDouble(base -> distance(base.getX(), base.getY(), centerPoint.getX(), centerPoint.getY())));
         cells.sort(Comparator.comparingDouble(cell -> distance(cell.getX(), cell.getY(), centerPoint.getX(), centerPoint.getY())));
@@ -81,8 +88,26 @@ public class Algorithm {
             }
         }
 
+        { // Распределяем атаку баз по зомби
+            Iterator<Zombie> zombieIterator = zombieList.iterator();
+            Iterator<Base> baseIterator = basesList.iterator();
+            while (zombieIterator.hasNext() && baseIterator.hasNext()) {
+                Zombie zombie = zombieIterator.next();
+                if (!isZombieComingToUs(centerPoint, zombie)) {
+                    continue;
+                }
 
-        int coins = 10;
+                while (baseIterator.hasNext()) {
+                    Base base = baseIterator.next();
+                    attacks.add(new Attack(base.getId(), new Target(zombie.getX(), zombie.getY())));
+                    if (zombie.getHealth() <= 0) {
+                        break;
+                    }
+                }
+
+            }
+        }
+
         List<Build> builds = new ArrayList<>();
         Iterator<Cell> cellIterator = cells.iterator();
         Cell cell = cellIterator.next();
@@ -107,6 +132,14 @@ public class Algorithm {
         }
 
         return grid;
+    }
+
+    // Определяем на нас ли движется зомби, если от нас, то и хуй с ним
+    public static boolean isZombieComingToUs(Point centerPoint, Zombie zombie) {
+        return centerPoint.getX() - zombie.getX() > 0 && zombie.getDirection() == "right" ||
+               centerPoint.getX() - zombie.getX() < 0 && zombie.getDirection() == "left" ||
+               centerPoint.getY() - zombie.getY() > 0 && zombie.getDirection() == "up" ||
+               centerPoint.getX() - zombie.getX() > 0 && zombie.getDirection() == "down";
     }
 
 }

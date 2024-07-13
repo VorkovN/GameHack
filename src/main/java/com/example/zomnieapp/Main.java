@@ -1,15 +1,12 @@
 package com.example.zomnieapp;
 
-import com.example.zomnieapp.app.Algorithm;
+import com.example.zomnieapp.app.Algorithms;
 import com.example.zomnieapp.app.Registration;
 import com.example.zomnieapp.body.BodyCommand;
 import com.example.zomnieapp.commands.Command;
 import com.example.zomnieapp.commands.UnitsService;
 import com.example.zomnieapp.commands.World;
-import com.example.zomnieapp.units.Base;
-import com.example.zomnieapp.units.Cell;
-import com.example.zomnieapp.units.EnemyBlock;
-import com.example.zomnieapp.units.Zombie;
+import com.example.zomnieapp.units.*;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -30,13 +27,15 @@ public class Main {
     private final UnitsService unitsService;
     private final Command command;
 
-    @Scheduled(cron = "*/2 * * * * *")
+    @Scheduled(cron = "*/1 * * * * *")
     public void mainTask(){
         var isSuccessfulReg = registration.registration();
         if (isSuccessfulReg) { // Если регистрация успешная, значит игра еще не началась.
             return;
         }
 
+        List<Zpot> zpotList = world.getZpots();
+        Player player = unitsService.getPlayer();
         List<Zombie> zombieList = unitsService.getZombies();
         List<Base> basesList = unitsService.getBases();
         List<EnemyBlock> enemyBlockList = unitsService.getEnemyBlocks();
@@ -46,8 +45,8 @@ public class Main {
         zombieList.sort(Comparator.comparingDouble(zombie -> distance(zombie.getX(), zombie.getY(), centerPoint.getX(), centerPoint.getY())));
         basesList.sort(Comparator.comparingDouble(base -> distance(base.getX(), base.getY(), centerPoint.getX(), centerPoint.getY())));
 
-        ArrayList<Cell> cells = Algorithm.buildMap(zombieList, basesList, enemyBlockList, centerPoint);
-        BodyCommand bodyCommand = Algorithm.generateCommand(zombieList, basesList, cells, centerPoint);
+        ArrayList<Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
+        BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, cells, centerPoint, player.getGold());
 
         command.attackFromBases(bodyCommand); // передается ID база и Zombie id x id y
     }

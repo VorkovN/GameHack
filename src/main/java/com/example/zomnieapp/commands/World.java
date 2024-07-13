@@ -2,9 +2,18 @@ package com.example.zomnieapp.commands;
 
 import com.example.zomnieapp.app.HeaderConfig;
 import com.example.zomnieapp.temp.JSON;
+import com.example.zomnieapp.units.Zpot;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class World {
@@ -16,27 +25,30 @@ public class World {
         this.restTemplate = new RestTemplate();
     }
 
-    public void printWorld() {
+    public List<Zpot> getZpots() {
+        List<Zpot> zpotList = new ArrayList<>();
         try {
-            HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
-//            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
+            HttpHeaders headers = HeaderConfig.getAuthHeader();
+            HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class); //
+            String responseBody = responseEntity.getBody();
 
-//            String responseBody = responseEntity.getBody();
-            var json = new JSON();
-            String responseBody = json.getMap();
-            String data = formatWorld(responseBody);
-            System.out.println(data);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            JsonNode zpotsNode = rootNode.path("zpots");
+
+            for (JsonNode zpotNode : zpotsNode) {
+                Zpot zpot = new Zpot(
+                        zpotNode.path("type").asText(),
+                        zpotNode.path("x").asInt(),
+                        zpotNode.path("y").asInt()
+                );
+                zpotList.add(zpot);
+            }
         } catch (Exception e) {
-            System.out.println("An error occurred at World class: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
-    }
-
-    private String formatWorld(String responseBody) {
-        // Простой парсер JSON для консольного вывода
-        StringBuilder formattedWorld = new StringBuilder();
-        formattedWorld.append("World Data:\n");
-        formattedWorld.append(responseBody.replace(",", ",\n"));
-        return formattedWorld.toString();
+        return zpotList;
     }
 }
 

@@ -5,9 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class Zombie {
-    private String direction;
-    private int health;
+public class Zpot {
+    private String type;
     private int x;
     private int y;
 }
