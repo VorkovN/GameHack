@@ -157,9 +157,13 @@ public class Algorithms {
 
         List<Build> builds = new ArrayList<>();
         for (Map.Entry<Point, Cell> entry : cells.entrySet()) {
+            if (coins <= 0) {
+                break;
+            }
+
             if (entry.getValue().getType().equals("free")) {
-                --coins;
                 builds.add(new Build(entry.getValue().getX(), entry.getValue().getY()));
+                --coins;
             }
         }
 

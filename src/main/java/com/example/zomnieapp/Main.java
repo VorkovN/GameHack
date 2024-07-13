@@ -50,8 +50,6 @@ public class Main {
         Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElseThrow(() -> new RuntimeException("Head base not found"));
         Point centerPoint = new Point(headBase.getX(), headBase.getY());
 
-
-
         System.out.println(centerPoint);
         System.out.println("turnEndsInMs_START: " + turnEndsInMs);
         System.out.println("EnemyBlockKills: " + player.getEnemyBlockKills());
