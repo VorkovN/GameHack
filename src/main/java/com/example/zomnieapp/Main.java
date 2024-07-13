@@ -27,7 +27,7 @@ public class Main {
     private final Command command;
     private final LogicToGui logicToGui;
 
-    @Scheduled(cron = "*/1 * * * * *")
+    @Scheduled(cron = "*/2 * * * * *")
     public void mainTask(){
         var isSuccessfulReg = registration.registration();
         if (!isSuccessfulReg) {
