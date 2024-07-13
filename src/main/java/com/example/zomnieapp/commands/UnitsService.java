@@ -7,7 +7,6 @@ import com.example.zomnieapp.units.Player;
 import com.example.zomnieapp.units.Zombie;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,24 +17,33 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+
 @Component
 public class UnitsService {
 
     private static final String URL = "https://games-test.datsteam.dev/play/zombidef/units";
     private final RestTemplate restTemplate;
+    private String responseBody;
 
     public UnitsService() {
         this.restTemplate = new RestTemplate();
     }
 
-    public List<Zombie> getZombies() {
-        List<Zombie> zombieList = new LinkedList<>();
+    public void getResponseAndInit() {
         try {
             HttpHeaders headers = HeaderConfig.getAuthHeader();
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class); //
-            String responseBody = responseEntity.getBody();
+            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
+            responseBody = responseEntity.getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Fail to create request" + e.getMessage());
+        }
+    }
 
+    public List<Zombie> getZombies() {
+        List<Zombie> zombieList = new ArrayList<>();
+        try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);
             JsonNode zombiesNode = rootNode.path("zombies");
@@ -56,12 +64,8 @@ public class UnitsService {
     }
 
     public List<Base> getBases() {
-        List<Base> baseList = new LinkedList<>();
+        List<Base> baseList = new ArrayList<>();
         try {
-            HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
-            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
-            String responseBody = responseEntity.getBody();
-
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);
             JsonNode baseNode = rootNode.path("base");
@@ -84,12 +88,8 @@ public class UnitsService {
     }
 
     public List<EnemyBlock> getEnemyBlocks() {
-        List<EnemyBlock> enemyBlockList = new LinkedList<>();
+        List<EnemyBlock> enemyBlockList = new ArrayList<>();
         try {
-            HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
-            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
-            String responseBody = responseEntity.getBody();
-
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);
             JsonNode enemyBlocksNode = rootNode.path("enemyBlocks");
@@ -110,10 +110,6 @@ public class UnitsService {
     public Player getPlayer() {
         Player player = null;
         try {
-            HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
-            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
-            String responseBody = responseEntity.getBody();
-
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);
             JsonNode playerNode = rootNode.path("player");

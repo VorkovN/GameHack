@@ -13,7 +13,7 @@ public class Registration {
 
     private final RestTemplate restTemplate;
     private static final String URL = "https://games-test.datsteam.dev/play/zombidef/participate";
-    private boolean completedRegistration = true;
+    private boolean completedRegistration = false;
 
     public Registration() {
         this.restTemplate = new RestTemplate();

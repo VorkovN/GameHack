@@ -13,10 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-
-import static java.awt.geom.Point2D.distance;
 
 @Component
 @AllArgsConstructor
@@ -34,18 +31,20 @@ public class Main {
             return;
         }
 
+        unitsService.getResponseAndInit();
         List<Zpot> zpotList = world.getZpots();
         Player player = unitsService.getPlayer();
         List<Zombie> zombieList = unitsService.getZombies();
         List<Base> basesList = unitsService.getBases();
         List<EnemyBlock> enemyBlockList = unitsService.getEnemyBlocks();
-        Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElse(null);
+        Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElseThrow(() -> new RuntimeException("Head base not found"));
         Point centerPoint = new Point(headBase.getX(), headBase.getY());
 
         ArrayList<Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
         //todo Отправить ване cells
+
         BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, cells, centerPoint, player.getGold());
 
-        command.attackFromBases(bodyCommand); // передается ID база и Zombie id x id y
+        command.attackFromBases(bodyCommand);
     }
 }
