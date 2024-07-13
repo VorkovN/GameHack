@@ -8,6 +8,7 @@ import com.example.zomnieapp.units.Zombie;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.LinkedList;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +18,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 
 @Component
 public class UnitsService {
@@ -42,7 +42,7 @@ public class UnitsService {
     }
 
     public List<Zombie> getZombies() {
-        List<Zombie> zombieList = new ArrayList<>();
+        List<Zombie> zombieList = new LinkedList<>();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);
@@ -64,7 +64,7 @@ public class UnitsService {
     }
 
     public List<Base> getBases() {
-        List<Base> baseList = new ArrayList<>();
+        List<Base> baseList = new LinkedList<>();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);
@@ -88,7 +88,7 @@ public class UnitsService {
     }
 
     public List<EnemyBlock> getEnemyBlocks() {
-        List<EnemyBlock> enemyBlockList = new ArrayList<>();
+        List<EnemyBlock> enemyBlockList = new LinkedList<>();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);

@@ -15,7 +15,7 @@ import static java.awt.geom.Point2D.distance;
 
 public class Algorithms {
 
-    public static final int WIDTH_MAP = 40;
+    public static final int WIDTH_MAP = 200;
 
     public static ArrayList<Cell> buildMap(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, List<Zpot> zpotList, Point centerPoint) {
 
@@ -71,27 +71,16 @@ public class Algorithms {
         enemyBlocksList.sort(Comparator.comparingDouble(enemyBlock -> distance(enemyBlock.getX(), enemyBlock.getY(), centerPoint.getX(), centerPoint.getY())));
         cells.sort(Comparator.comparingDouble(cell -> distance(cell.getX(), cell.getY(), centerPoint.getX(), centerPoint.getY())));
 
-        List<Attack> attacks = new ArrayList<>();
+        System.out.println("enemyBlocksList.size: " + zombieList.size());
+        System.out.println("enemyBlocksList.size: " + basesList.size());
+        System.out.println("enemyBlocksList.size: " + enemyBlocksList.size());
 
-        // Распределяем атаку баз по зомби
+        int zombie_counter = 0;
+        int enemy_counter = 0;
+        List<Attack> attacks = new ArrayList<>();
         Iterator<Base> baseIterator = basesList.iterator();
 
-        for (EnemyBlock enemyBlocks : enemyBlocksList) {
-            while (baseIterator.hasNext()) {
-                Base base = baseIterator.next();
-                if (distance(base.getX(), base.getY(), enemyBlocks.getX(), enemyBlocks.getY()) > base.getRange()) {
-                    continue;
-                }
-
-                attacks.add(new Attack(base.getId(), new Target(enemyBlocks.getX(), enemyBlocks.getY())));
-                baseIterator.remove();
-                if (enemyBlocks.getHealth() <= 0) {
-                    break;
-                }
-            }
-        }
-
-
+        // Распределяем атаку баз по зомби
         for (Zombie zombie : zombieList) {
             if (!isZombieComingToUs(centerPoint, zombie)) {
                 continue;
@@ -104,19 +93,39 @@ public class Algorithms {
                 }
 
                 attacks.add(new Attack(base.getId(), new Target(zombie.getX(), zombie.getY())));
+                ++zombie_counter;
                 baseIterator.remove();
                 if (zombie.getHealth() <= 0) {
                     break;
                 }
             }
         }
+        System.out.println("zombie_counter: " + zombie_counter);
+
+        // Распределяем атаку баз по вражеским клеткам
+        for (EnemyBlock enemyBlocks : enemyBlocksList) {
+            while (baseIterator.hasNext()) {
+                Base base = baseIterator.next();
+                if (distance(base.getX(), base.getY(), enemyBlocks.getX(), enemyBlocks.getY()) > base.getRange()) {
+                    continue;
+                }
+
+                attacks.add(new Attack(base.getId(), new Target(enemyBlocks.getX(), enemyBlocks.getY())));
+                ++enemy_counter;
+                baseIterator.remove();
+                if (enemyBlocks.getHealth() <= 0) {
+                    break;
+                }
+            }
+        }
+        System.out.println("enemy_counter: " + enemy_counter);
 
 
         List<Build> builds = new ArrayList<>();
         Iterator<Cell> cellIterator = cells.iterator();
         while (coins > 0 && cellIterator.hasNext()) {
             Cell cell = cellIterator.next();
-            if (cell.getType().equals("free")) {
+            if (ceenemy_counterll.getType().equals("free")) {
                 --coins;
                 builds.add(new Build(cell.getX(), cell.getY()));
             }

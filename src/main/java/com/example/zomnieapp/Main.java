@@ -44,10 +44,10 @@ public class Main {
         Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElseThrow(() -> new RuntimeException("Head base not found"));
         Point centerPoint = new Point(headBase.getX(), headBase.getY());
         System.out.println(centerPoint);
-        System.out.println(player.getEnemyBlockKills());
-        System.out.println(player.getGold());
-        System.out.println(player.getPoints());
-        System.out.println(player.getZombieKills());
+        System.out.println("EnemyBlockKills: " + player.getEnemyBlockKills());
+        System.out.println("Gold: " + player.getGold());
+        System.out.println("Points: " + player.getPoints());
+        System.out.println("ZombieKills: " + player.getZombieKills());
 
         ArrayList<Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
         logicToGui.execute(cells);
