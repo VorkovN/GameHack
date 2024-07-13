@@ -18,6 +18,7 @@ public class GridPanel extends JPanel {
     private int cols;
     private List<List<RenderMapPoint>> points;
     private final DefaultTableModel infoTableModel;
+    private JPanel selectedCell;
 
     public GridPanel(int rows, int cols, DefaultTableModel infoTableModel) {
         this.rows = rows;
@@ -49,6 +50,7 @@ public class GridPanel extends JPanel {
                     } else {
                         clearInfoTable();
                     }
+                    selectCell(cell);
                 }
             }
         });
@@ -103,5 +105,13 @@ public class GridPanel extends JPanel {
 
     private void clearInfoTable() {
         infoTableModel.setRowCount(0);
+    }
+
+    private void selectCell(JPanel cell) {
+        if (selectedCell != null) {
+            selectedCell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        }
+        selectedCell = cell;
+        selectedCell.setBorder(BorderFactory.createLineBorder(Color.RED));
     }
 }

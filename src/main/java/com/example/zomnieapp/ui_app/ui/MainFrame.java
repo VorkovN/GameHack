@@ -19,6 +19,7 @@ public class MainFrame extends JFrame {
 
     private GridPanel gridPanel;
     private DefaultTableModel tableModel;
+    private DefaultTableModel infoTableModel;
 
     public MainFrame() {
         setTitle("Spring Boot with Swing");
@@ -31,6 +32,7 @@ public class MainFrame extends JFrame {
             @Override
             public void newMap(List<List<RenderMapPoint>> points) {
                 showMap(points);
+                System.out.println(points);
             }
 
             @Override
@@ -41,31 +43,72 @@ public class MainFrame extends JFrame {
     }
 
     private void initUI() {
-        JPanel textPanel = new JPanel();
-        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+        // Создание главной панели для всего содержимого
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+
+        // Сообщение об ошибке
+        JLabel errorMessage = new JLabel("Если карта не отображается, нужно перезапустить аппку");
+        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        mainPanel.add(errorMessage, BorderLayout.NORTH);
+
+        // Создание центральной панели для карты и информации об объекте
+        JPanel centerPanel = new JPanel(new BorderLayout());
+
+        // Заголовок для карты
+        JLabel mapLabel = new JLabel("Карта");
+        mapLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Инициализация таблицы для отображения информации об объекте
-        String[] infoColumnNames = {"Property", "Value"};
-        DefaultTableModel infoTableModel = new DefaultTableModel(infoColumnNames, 0);
+        String[] infoColumnNames = {"Свойство", "Значение"};
+        infoTableModel = new DefaultTableModel(infoColumnNames, 0);
         JTable infoTable = new JTable(infoTableModel);
         JScrollPane infoScrollPane = new JScrollPane(infoTable);
 
+        // Заголовок для информации об объекте
+        JLabel infoLabel = new JLabel("Информация об объекте");
+        infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
         gridPanel = new GridPanel(1, 1, infoTableModel);
 
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(textPanel, BorderLayout.NORTH);
-        getContentPane().add(gridPanel, BorderLayout.CENTER);
-        getContentPane().add(infoScrollPane, BorderLayout.EAST);
+        // Панель для карты с заголовком
+        JPanel mapPanel = new JPanel(new BorderLayout());
+        mapPanel.add(mapLabel, BorderLayout.NORTH);
+        mapPanel.add(gridPanel, BorderLayout.CENTER);
 
-        // Инициализация таблицы
-        String[] columnNames = {"Name", "Enemy Block Kills", "Game Ended At", "Gold", "Points", "Zombie Kills"};
+        centerPanel.add(mapPanel, BorderLayout.CENTER);
+
+        // Панель для информации об объекте с заголовком
+        JPanel infoPanel = new JPanel(new BorderLayout());
+        infoPanel.add(infoLabel, BorderLayout.NORTH);
+        infoPanel.add(infoScrollPane, BorderLayout.CENTER);
+
+        centerPanel.add(infoPanel, BorderLayout.EAST);
+
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
+
+        // Инициализация таблицы для статуса игрока
+        String[] columnNames = {"Имя", "Убийства врагов", "Конец игры", "Золото", "Очки", "Убийства зомби"};
         tableModel = new DefaultTableModel(columnNames, 0);
         JTable playerStatusTable = new JTable(tableModel);
         playerStatusTable.setFillsViewportHeight(true);
 
         JScrollPane scrollPane = new JScrollPane(playerStatusTable);
         scrollPane.setPreferredSize(new Dimension(800, 200));
-        getContentPane().add(scrollPane, BorderLayout.SOUTH);
+
+        // Заголовок для статуса игрока
+        JLabel statusLabel = new JLabel("Статус игрока");
+        statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Панель для статуса игрока с заголовком
+        JPanel statusPanel = new JPanel(new BorderLayout());
+        statusPanel.add(statusLabel, BorderLayout.NORTH);
+        statusPanel.add(scrollPane, BorderLayout.CENTER);
+
+        mainPanel.add(statusPanel, BorderLayout.SOUTH);
+
+        // Добавление главной панели в содержимое окна
+        getContentPane().add(mainPanel);
     }
 
     private void showMap(List<List<RenderMapPoint>> points) {
@@ -90,7 +133,7 @@ public class MainFrame extends JFrame {
     }
 
     private void showPlayerStatus(PlayerStatus playerStatus) {
-        tableModel.addRow(new Object[]{
+        tableModel.insertRow(0, new Object[]{
                 playerStatus.getName(),
                 playerStatus.getEnemyBlockKills(),
                 playerStatus.getGameEndedAt(),

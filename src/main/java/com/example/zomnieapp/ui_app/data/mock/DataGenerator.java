@@ -15,7 +15,7 @@ public class DataGenerator {
     private final MockMapPointGenerator mockMapPointGenerator = new MockMapPointGenerator();
 
 
-    private volatile List<List<MockMapPoint>> fullMap;
+    private final List<List<MockMapPoint>> fullMap;
 
     private int width;
 
@@ -82,19 +82,18 @@ public class DataGenerator {
 
     public Set<Coordinate> generateVisibleCoordinates(Set<Coordinate> currentCoordinates) {
         Set<Coordinate> allCoordinates = new HashSet<>(currentCoordinates);
-        if (currentCoordinates.isEmpty()) {
-            // Генерация 10 координат, вплотную стоящих друг к другу
-            int startX = random.nextInt(fullMap.size() - 10); // Гарантирует, что будет место для 10 координат
-            int startY = random.nextInt(fullMap.get(0).size() - 10);
+        int mapWidth = fullMap.size();
+        int mapHeight = fullMap.get(0).size();
 
-            boolean vertical = random.nextBoolean(); // Определяет, будут ли координаты расположены вертикально или горизонтально
+        if (currentCoordinates.isEmpty()) {
+            // Генерация 10 координат в куче
+            int startX = random.nextInt(mapWidth - 10);
+            int startY = random.nextInt(mapHeight - 10);
 
             for (int i = 0; i < 10; i++) {
-                if (vertical) {
-                    allCoordinates.add(new Coordinate(startX, startY + i));
-                } else {
-                    allCoordinates.add(new Coordinate(startX + i, startY));
-                }
+                int offsetX = random.nextInt(5); // Случайное смещение в пределах 5 клеток
+                int offsetY = random.nextInt(5);
+                allCoordinates.add(new Coordinate(startX + offsetX, startY + offsetY));
             }
         } else {
             Coordinate newCoordinate;
@@ -108,6 +107,7 @@ public class DataGenerator {
 
         return allCoordinates;
     }
+
 
     private Coordinate getRandomNeighbor(Set<Coordinate> coordinates) {
         // Выбираем случайную координату из текущих

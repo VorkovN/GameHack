@@ -7,16 +7,17 @@ import com.example.zomnieapp.ui_app.data.model.enemy.EnemyBaseSubject;
 import com.example.zomnieapp.ui_app.data.model.zombie.ZombieSubject;
 
 import java.awt.*;
+import java.util.Objects;
 
 import static com.example.zomnieapp.ui_app.data.model.MapPointType.WALL;
 
 public class RenderMapPoint {
 
-    private MapPointType type;
+    private final MapPointType type;
 
-    private MapSubject subject;
+    private final MapSubject subject;
 
-    private boolean visible;
+    private final boolean visible;
 
     public RenderMapPoint(MapPointType type, MapSubject subject, boolean visible) {
         this.type = type;
@@ -28,11 +29,11 @@ public class RenderMapPoint {
         if (type == WALL) {
             return Color.DARK_GRAY;
         } else if (subject instanceof EnemyBaseSubject) {
-            return Color.RED;
+            return Color.decode("#FF99BB"); // PINK
         } else if (subject instanceof BaseSubject) {
-            return Color.BLUE;
+            return Color.decode("#66CCFF"); // BLUE
         } else if (subject instanceof ZombieSubject) {
-            return Color.GREEN;
+            return Color.decode("#1EB300"); // GREEN
         } else if (visible) {
             return Color.LIGHT_GRAY;
         } else {
@@ -59,5 +60,18 @@ public class RenderMapPoint {
 
     public boolean isVisible() {
         return visible;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RenderMapPoint that = (RenderMapPoint) o;
+        return visible == that.visible && type == that.type && Objects.equals(subject, that.subject);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, subject, visible);
     }
 }
