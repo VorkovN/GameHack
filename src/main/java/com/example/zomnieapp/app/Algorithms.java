@@ -134,6 +134,7 @@ public class Algorithms {
 
                 attacks.add(new Attack(base.getId(), new Target(zombie.getX(), zombie.getY())));
                 ++zombie_counter;
+                zombie.setHealth(zombie.getHealth() - base.getRange());
                 baseIterator.remove();
                 if (zombie.getHealth() <= 0) {
                     break;
@@ -152,6 +153,7 @@ public class Algorithms {
 
                 attacks.add(new Attack(base.getId(), new Target(enemyBlocks.getX(), enemyBlocks.getY())));
                 ++enemy_counter;
+                enemyBlocks.setHealth(enemyBlocks.getHealth() - base.getRange());
                 baseIterator.remove();
                 if (enemyBlocks.getHealth() <= 0) {
                     break;
@@ -185,7 +187,15 @@ public class Algorithms {
                 double distance1 = p1.distance(point.x, point.y);
                 double distance2 = p2.distance(point.x, point.y);
 
-                return Double.compare(distance1, distance2);
+                if (distance1 != distance2) {
+                    return Double.compare(distance1, distance2);
+                }
+
+                if (p1.x != p2.x) {
+                    return Double.compare(p1.x, p2.x);
+                }
+
+                return Double.compare(p1.y, p2.y);
             }
         };
 
