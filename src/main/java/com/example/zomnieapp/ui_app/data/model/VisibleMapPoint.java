@@ -1,10 +1,14 @@
 package com.example.zomnieapp.ui_app.data.model;
 
 public class VisibleMapPoint {
+
+    // NonNull
     private final MapPointType type;
 
+    // Nullable
     private final MapSubject subject;
 
+    // NonNull
     private final Coordinate coordinate;
 
     public VisibleMapPoint(MapPointType type, MapSubject subject, Coordinate coordinate) {
