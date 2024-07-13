@@ -7,6 +7,8 @@ import com.example.zomnieapp.ui_app.data.model.Coordinate;
 import com.example.zomnieapp.ui_app.data.model.MapPointType;
 import com.example.zomnieapp.ui_app.data.model.PlayerStatus;
 import com.example.zomnieapp.ui_app.data.model.VisibleMapPoint;
+import com.example.zomnieapp.ui_app.data.real.RenderDataRepositoryImpl;
+import com.example.zomnieapp.ui_app.ui.MainFrame;
 import com.example.zomnieapp.units.Cell;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +20,6 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class LogicToGui {
-    private final RenderDataRepository renderDataRepository;
     private final UnitsService unitsService;
 
     public void execute(ArrayList<Cell> cells) {
@@ -29,7 +30,7 @@ public class LogicToGui {
     private void visualizePlayerStatus() {
         var originPlayer = unitsService.getPlayer();
         var visualPlayer = new PlayerStatus(0, LocalDateTime.now(), originPlayer.getGold(), "name", 0, 0);
-        renderDataRepository.onNewPlayerStatus(visualPlayer);
+        MainFrame.dataRepository.onNewPlayerStatus(visualPlayer);
     }
 
     private void visualizeMap(ArrayList<Cell> cells) {
@@ -42,7 +43,7 @@ public class LogicToGui {
             );
             visibleMapPoints.add(vis);
         }
-        renderDataRepository.onNewMap(Algorithms.WIDTH_MAP, Algorithms.WIDTH_MAP, visibleMapPoints);
+        MainFrame.dataRepository.onNewMap(Algorithms.WIDTH_MAP, Algorithms.WIDTH_MAP, visibleMapPoints);
     }
 
     private MapPointType convertToMapPointType(String cellType) {
