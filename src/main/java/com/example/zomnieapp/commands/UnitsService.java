@@ -2,6 +2,7 @@ package com.example.zomnieapp.commands;
 
 import com.example.zomnieapp.app.HeaderConfig;
 import com.example.zomnieapp.units.Base;
+import com.example.zomnieapp.units.EnemyBlock;
 import com.example.zomnieapp.units.Zombie;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +42,8 @@ public class UnitsService {
 
             for (JsonNode zombieNode : zombiesNode) {
                 Zombie zombie = new Zombie(
+                        zombieNode.path("direction").asInt(),
+                        zombieNode.path("health").asInt(),
                         zombieNode.path("x").asInt(),
                         zombieNode.path("y").asInt()
                 );
@@ -77,5 +80,29 @@ public class UnitsService {
             System.out.println(e.getMessage());
         }
         return baseList;
+    }
+
+    public List<EnemyBlock> getEnemyBlocks() {
+        List<EnemyBlock> enemyBlockList = new ArrayList<>();
+        try {
+            HttpEntity<String> requestEntity = new HttpEntity<>(HeaderConfig.getAuthHeader());
+            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
+            String responseBody = responseEntity.getBody();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            JsonNode enemyBlocksNode = rootNode.path("enemyBlocks");
+
+            for (JsonNode enemyBlocksJson : enemyBlocksNode) {
+                EnemyBlock enemyBlock = new EnemyBlock(
+                        enemyBlocksJson.path("x").asInt(),
+                        enemyBlocksJson.path("y").asInt()
+                );
+                enemyBlockList.add(enemyBlock);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return enemyBlockList;
     }
 }

@@ -29,14 +29,9 @@ public class Command {
         this.gson = new Gson();
     }
 
-    public void attackFromBases(List<Base> bases, Zombie zombie) {
+    public void attackFromBases(BodyCommand bodyCommand) {
         try {
             HttpHeaders headers = HeaderConfig.getAuthHeader();
-            List<Attack> attacks = new ArrayList<>();
-            for (var base : bases) {
-                attacks.add(new Attack(base.getId(), new Target(zombie.getX(), zombie.getY())));
-            }
-            BodyCommand bodyCommand = new BodyCommand(attacks, null, null);
             String gsonBody = gson.toJson(bodyCommand);
             System.out.println(gsonBody);
             HttpEntity<String> requestEntity = new HttpEntity<>(gsonBody, headers);
