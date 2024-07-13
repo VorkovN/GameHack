@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import static com.example.zomnieapp.ZomnieAppApplication.HOST_URL;
+
 @Component
 public class Command {
 
-    private static final String URL = "https://games-test.datsteam.dev/play/zombidef/command";
+    private static final String URL = HOST_URL + "/play/zombidef/command";
     private final RestTemplate restTemplate;
     private final Gson gson;
 

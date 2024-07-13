@@ -19,11 +19,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import static com.example.zomnieapp.ZomnieAppApplication.HOST_URL;
+
 
 @Component
 public class UnitsService {
 
-    private static final String URL = "https://games-test.datsteam.dev/play/zombidef/units";
+    private static final String URL = HOST_URL + "/play/zombidef/units";
     private final RestTemplate restTemplate;
     private String responseBody;
 
