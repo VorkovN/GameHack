@@ -29,10 +29,10 @@ public class Main {
 
     @Scheduled(cron = "*/2 * * * * *")
     public void mainTask(){
-        var isSuccessfulReg = registration.registration();
-        if (!isSuccessfulReg) {
-            return;
-        }
+//        var isSuccessfulReg = registration.registration();
+//        if (!isSuccessfulReg) {
+//            return;
+//        }
         initServices();
 
         // основная логика
@@ -43,12 +43,15 @@ public class Main {
         List<EnemyBlock> enemyBlockList = unitsService.getEnemyBlocks();
         Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElseThrow(() -> new RuntimeException("Head base not found"));
         Point centerPoint = new Point(headBase.getX(), headBase.getY());
+        System.out.println(centerPoint);
+        System.out.println(player.getEnemyBlockKills());
+        System.out.println(player.getGold());
+        System.out.println(player.getPoints());
+        System.out.println(player.getZombieKills());
 
         ArrayList<Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
-        //todo Отправить ване cells
         logicToGui.execute(cells);
         BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, cells, centerPoint, player.getGold());
-
         command.execute(bodyCommand);
     }
 

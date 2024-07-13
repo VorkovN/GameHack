@@ -98,13 +98,13 @@ public class Algorithms {
 
         List<Build> builds = new ArrayList<>();
         Iterator<Cell> cellIterator = cells.iterator();
-        Cell cell = cellIterator.next();
         while (coins > 0 && cellIterator.hasNext()) {
+            Cell cell = cellIterator.next();
             if (cell.getType().equals("free")) {
                 --coins;
                 builds.add(new Build(cell.getX(), cell.getY()));
-                cellIterator.next();
             }
+
         }
 
         return new BodyCommand(attacks, builds, null);
@@ -114,7 +114,7 @@ public class Algorithms {
         int grid_size = WIDTH_MAP / 2; // Половина размера сетки
         ArrayList<Cell> grid = new ArrayList<>();
         for (int x = point.x - grid_size; x < point.x + grid_size; x++) {
-            for (int y = point.x - grid_size; y < point.x + grid_size; y++) {
+            for (int y = point.y - grid_size; y < point.y + grid_size; y++) {
                 grid.add(new Cell("free", x, y));
             }
         }

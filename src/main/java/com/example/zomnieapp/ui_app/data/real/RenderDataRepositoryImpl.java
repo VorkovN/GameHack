@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.zomnieapp.ui_app.data.model.MapPointType.DEFAULT;
+import static com.example.zomnieapp.ui_app.data.model.MapPointType.FREE;
 import static java.lang.Math.max;
 
 @Component
@@ -64,7 +65,7 @@ public class RenderDataRepositoryImpl implements RenderDataRepository {
         for (int i = 0; i < gridSize; i++) {
             List<RenderMapPoint> row = new ArrayList<>(gridSize);
             for (int j = 0; j < gridSize; j++) {
-                row.add(new RenderMapPoint(DEFAULT, null, false));  // Заполняем null, чтобы позже заменить на реальные точки
+                row.add(new RenderMapPoint(FREE, null, false));  // Заполняем null, чтобы позже заменить на реальные точки
             }
             renderMap.add(row);
         }

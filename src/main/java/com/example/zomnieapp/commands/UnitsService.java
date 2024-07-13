@@ -113,7 +113,10 @@ public class UnitsService {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);
             JsonNode playerNode = rootNode.path("player");
-            player = new Player(playerNode.path("gold").asInt());
+            player = new Player(playerNode.path("enemyBlockKills").asInt(),
+                                playerNode.path("gold").asInt(),
+                                playerNode.path("points").asInt(),
+                                playerNode.path("zombieKills").asInt());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
