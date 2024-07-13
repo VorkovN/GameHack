@@ -30,7 +30,7 @@ public class Main {
     @Scheduled(cron = "*/1 * * * * *")
     public void mainTask(){
         var isSuccessfulReg = registration.registration();
-        if (isSuccessfulReg) {
+        if (!isSuccessfulReg) {
             return;
         }
         initServices();
