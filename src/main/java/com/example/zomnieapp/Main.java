@@ -34,6 +34,8 @@ public class Main {
 //        if (!isSuccessfulReg) {
 //            return;
 //        }
+        long startTime = System.currentTimeMillis();
+
         initServices();
 
         // основная логика
@@ -41,6 +43,10 @@ public class Main {
         if (turnEndsInMs < 1000) {
             return;
         }
+
+        System.out.println("----Start-----");
+        System.out.println("Start at time : " + startTime);
+
 
         List<Zpot> zpotList = worldService.getZpots();
         Player player = unitsService.getPlayer();
@@ -62,6 +68,11 @@ public class Main {
         logicToGui.execute(cells);
         BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, enemyBlockList, cells, centerPoint, player.getGold());
         command.execute(bodyCommand);
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("End at time : " + endTime);
+        System.out.println("Time taken mills: " + (endTime - startTime));
+        System.out.println("----End-----");
     }
 
     private void initServices() {
