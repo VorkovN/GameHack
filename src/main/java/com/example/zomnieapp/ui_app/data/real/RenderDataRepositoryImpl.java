@@ -4,6 +4,7 @@ import com.example.zomnieapp.ui_app.data.RenderDataRepository;
 import com.example.zomnieapp.ui_app.data.model.Coordinate;
 import com.example.zomnieapp.ui_app.data.model.PlayerStatus;
 import com.example.zomnieapp.ui_app.data.model.VisibleMapPoint;
+import com.example.zomnieapp.ui_app.ui.MainFrame;
 import com.example.zomnieapp.ui_app.ui.model.RenderMapPoint;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import static com.example.zomnieapp.ui_app.data.model.MapPointType.DEFAULT;
 import static com.example.zomnieapp.ui_app.data.model.MapPointType.FREE;
 import static java.lang.Math.max;
 
-@Component
+//@Component
 public class RenderDataRepositoryImpl implements RenderDataRepository {
 
     private volatile OnNewDataListener onNewDataListener;
@@ -39,7 +40,7 @@ public class RenderDataRepositoryImpl implements RenderDataRepository {
         try {
             onNewDataListener.newMap(map);
         } catch (Throwable t) {
-
+            System.out.println("error in new map : " + t.getMessage());
         }
     }
 
@@ -95,7 +96,7 @@ public class RenderDataRepositoryImpl implements RenderDataRepository {
         try {
             onNewDataListener.newPlayer(playerStatus);
         } catch (Throwable t) {
-
+            System.out.println("error in player : " + t.getMessage());
         }
     }
 }
