@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Setter
 @AllArgsConstructor
 public class EnemyBlock {
     private int health;

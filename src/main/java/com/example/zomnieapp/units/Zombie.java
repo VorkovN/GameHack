@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Setter
 @AllArgsConstructor
 public class Zombie {
     private String direction;

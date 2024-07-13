@@ -14,7 +14,7 @@ import java.awt.*;
 public class ZomnieAppApplication {
 
     // TODO: CHECK BEFORE LAUNCH!
-    public static String HOST_URL = "https://games-test.datsteam.dev";
+    public static String HOST_URL = "https://games.datsteam.dev";
 
     public static void main(String[] args) {
         if (GraphicsEnvironment.isHeadless()) {

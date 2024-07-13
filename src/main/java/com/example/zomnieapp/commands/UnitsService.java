@@ -1,6 +1,7 @@
 package com.example.zomnieapp.commands;
 
 import com.example.zomnieapp.app.HeaderConfig;
+import com.example.zomnieapp.ui_app.data.model.Coordinate;
 import com.example.zomnieapp.units.Base;
 import com.example.zomnieapp.units.EnemyBlock;
 import com.example.zomnieapp.units.Player;
