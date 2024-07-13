@@ -182,8 +182,8 @@ public class Algorithms {
         Comparator<Point> comparator = new Comparator<Point>() {
             @Override
             public int compare(Point p1, Point p2) {
-                double distance1 = p1.distance(0, 0);
-                double distance2 = p2.distance(0, 0);
+                double distance1 = p1.distance(point.x, point.y);
+                double distance2 = p2.distance(point.x, point.y);
 
                 return Double.compare(distance1, distance2);
             }

@@ -62,9 +62,6 @@ public class Main {
         logicToGui.execute(cells);
         BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, enemyBlockList, cells, centerPoint, player.getGold());
         command.execute(bodyCommand);
-
-        unitsService.getResponseAndInit();
-        System.out.println("turnEndsInMs_END: " + unitsService.getTurnEndsInMs());
     }
 
     private void initServices() {
