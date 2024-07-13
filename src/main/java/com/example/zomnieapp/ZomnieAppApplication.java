@@ -26,5 +26,4 @@ public class ZomnieAppApplication {
             mainFrame.setVisible(true);
         });
     }
-
 }
