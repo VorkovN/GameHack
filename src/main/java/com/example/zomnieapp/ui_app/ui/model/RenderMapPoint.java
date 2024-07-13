@@ -9,7 +9,7 @@ import com.example.zomnieapp.ui_app.data.model.zombie.ZombieSubject;
 import java.awt.*;
 import java.util.Objects;
 
-import static com.example.zomnieapp.ui_app.data.model.MapPointType.WALL;
+import static com.example.zomnieapp.ui_app.data.model.MapPointType.*;
 
 public class RenderMapPoint {
 
@@ -28,11 +28,11 @@ public class RenderMapPoint {
     public Color getColor() {
         if (type == WALL) {
             return Color.DARK_GRAY;
-        } else if (subject instanceof EnemyBaseSubject) {
+        } else if (subject instanceof EnemyBaseSubject || type == ENEMY_BLOCK) {
             return Color.decode("#FF99BB"); // PINK
-        } else if (subject instanceof BaseSubject) {
+        } else if (subject instanceof BaseSubject || type == BASE) {
             return Color.decode("#66CCFF"); // BLUE
-        } else if (subject instanceof ZombieSubject) {
+        } else if (subject instanceof ZombieSubject || type == ZOMBIE) {
             return Color.decode("#1EB300"); // GREEN
         } else if (visible) {
             return Color.LIGHT_GRAY;
