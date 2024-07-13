@@ -50,6 +50,10 @@ public class LogicToGui {
         switch (cellType) {
             case "default" : return MapPointType.DEFAULT;
             case "wall" : return MapPointType.WALL;
+            case "zombie" : return MapPointType.ZOMBIE;
+            case "base" : return MapPointType.BASE;
+            case "enemyBlock" : return MapPointType.ENEMY_BLOCK;
+            case "free" : return MapPointType.FREE;
             default: throw new RuntimeException("Unknown cell type for visual: " + cellType);
         }
     }
