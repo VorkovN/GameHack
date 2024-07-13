@@ -28,8 +28,14 @@ public class LogicToGui {
     }
 
     private void visualizePlayerStatus() {
-        var originPlayer = unitsService.getPlayer();
-        var visualPlayer = new PlayerStatus(0, LocalDateTime.now(), originPlayer.getGold(), "name", 0, 0);
+        var player = unitsService.getPlayer();
+        var visualPlayer = new PlayerStatus(
+                player.getEnemyBlockKills(),
+                String.format("time: %s", unitsService.getTurnEndsInMs()),
+                player.getGold(),
+                "Nikitos",
+                player.getPoints(),
+                player.getZombieKills());
         MainFrame.dataRepository.onNewPlayerStatus(visualPlayer);
     }
 
