@@ -28,6 +28,8 @@ public class RenderMapPoint {
     public Color getColor() {
         if (type == WALL) {
             return Color.DARK_GRAY;
+        } else if (type == NO_BUILD) {
+            return Color.GRAY;
         } else if (subject instanceof EnemyBaseSubject || type == ENEMY_BLOCK) {
             return Color.decode("#FF99BB"); // PINK
         } else if (subject instanceof BaseSubject || type == BASE) {

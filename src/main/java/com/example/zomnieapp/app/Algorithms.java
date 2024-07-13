@@ -105,7 +105,7 @@ public class Algorithms {
     }
 
 
-    public static BodyCommand generateCommand(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, List<Cell> cells, Point centerPoint, int coins) {
+    public static BodyCommand generateCommand(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, TreeMap<Point, Cell> cells, Point centerPoint, int coins) {
         zombieList.sort(Comparator.comparingDouble(zombie -> distance(zombie.getX(), zombie.getY(), centerPoint.getX(), centerPoint.getY())));
         basesList.sort(Comparator.comparingDouble(base -> distance(base.getX(), base.getY(), centerPoint.getX(), centerPoint.getY())));
         enemyBlocksList.sort(Comparator.comparingDouble(enemyBlock -> distance(enemyBlock.getX(), enemyBlock.getY(), centerPoint.getX(), centerPoint.getY())));
@@ -162,14 +162,15 @@ public class Algorithms {
 
 
         List<Build> builds = new ArrayList<>();
-        Iterator<Cell> cellIterator = cells.iterator();
-        while (coins > 0 && cellIterator.hasNext()) {
-            Cell cell = cellIterator.next();
-            if (cell.getType().equals("free")) {
-                --coins;
-                builds.add(new Build(cell.getX(), cell.getY()));
+        for (Map.Entry<Point, Cell> entry : cells.entrySet()) {
+            if (coins <= 0) {
+                break;
             }
 
+            if (entry.getValue().getType().equals("free")) {
+                builds.add(new Build(entry.getValue().getX(), entry.getValue().getY()));
+                --coins;
+            }
         }
 
         return new BodyCommand(attacks, builds, null);

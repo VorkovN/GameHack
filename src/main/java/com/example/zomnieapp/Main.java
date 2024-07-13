@@ -50,8 +50,6 @@ public class Main {
         Base headBase = basesList.stream().filter(Base::isHead).findFirst().orElseThrow(() -> new RuntimeException("Head base not found"));
         Point centerPoint = new Point(headBase.getX(), headBase.getY());
 
-
-
         System.out.println(centerPoint);
         System.out.println("turnEndsInMs_START: " + turnEndsInMs);
         System.out.println("EnemyBlockKills: " + player.getEnemyBlockKills());
@@ -60,10 +58,9 @@ public class Main {
         System.out.println("ZombieKills: " + player.getZombieKills());
 
         TreeMap<Point, Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
-        ArrayList<Cell> cellList = new ArrayList<>(cells.values());
 
-        logicToGui.execute(cellList);
-        BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, enemyBlockList, cellList, centerPoint, player.getGold());
+        logicToGui.execute(cells);
+        BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, enemyBlockList, cells, centerPoint, player.getGold());
         command.execute(bodyCommand);
 
         unitsService.getResponseAndInit();
