@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class UnitsService {
 
-    private static final String URL = "https://games-test.datsteam.dev/play/zombidef/units";
+    private static final String URL = "https://games.datsteam.dev/play/zombidef/units";
     private final RestTemplate restTemplate;
     private String responseBody;
 

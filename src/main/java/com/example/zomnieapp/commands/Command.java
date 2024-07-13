@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class Command {
 
-    private static final String URL = "https://games-test.datsteam.dev/play/zombidef/command";
+    private static final String URL = "https://games.datsteam.dev/play/zombidef/command";
     private final RestTemplate restTemplate;
     private final Gson gson;
 

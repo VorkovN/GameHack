@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class WorldService {
 
-    private static final String URL = "https://games-test.datsteam.dev/play/zombidef/world";
+    private static final String URL = "https://games.datsteam.dev/play/zombidef/world";
     private final RestTemplate restTemplate;
     private String responseBody;
 

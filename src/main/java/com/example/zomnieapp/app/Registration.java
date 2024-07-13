@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 public class Registration {
 
     private final RestTemplate restTemplate;
-    private static final String URL = "https://games-test.datsteam.dev/play/zombidef/participate";
+    private static final String URL = "https://games.datsteam.dev/play/zombidef/participate";
     private boolean completedRegistration = false;
 
     public Registration() {
