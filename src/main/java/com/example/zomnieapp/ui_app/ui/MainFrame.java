@@ -32,7 +32,7 @@ public class MainFrame extends JFrame {
             @Override
             public void newMap(List<List<RenderMapPoint>> points) {
                 showMap(points);
-                System.out.println(points);
+//                System.out.println(points);
             }
 
             @Override
