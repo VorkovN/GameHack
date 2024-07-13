@@ -78,14 +78,15 @@ public class Algorithms {
         int zombie_counter = 0;
         int enemy_counter = 0;
         List<Attack> attacks = new ArrayList<>();
-        Iterator<Base> baseIterator = basesList.iterator();
+
 
         // Распределяем атаку баз по зомби
         for (Zombie zombie : zombieList) {
-//            if (!isZombieComingToUs(centerPoint, zombie)) {
-//                continue;
-//            }
+            if (!isZombieComingToUs(centerPoint, zombie)) {
+                continue;
+            }
 
+            Iterator<Base> baseIterator = basesList.iterator();
             while (baseIterator.hasNext()) {
                 Base base = baseIterator.next();
                 if (distance(base.getX(), base.getY(), zombie.getX(), zombie.getY()) > base.getRange()) {
@@ -102,9 +103,12 @@ public class Algorithms {
             }
         }
         System.out.println("zombie_counter: " + zombie_counter);
+        System.out.println("basesList.size: " + basesList.size());
 
         // Распределяем атаку баз по вражеским клеткам
         for (EnemyBlock enemyBlocks : enemyBlocksList) {
+
+            Iterator<Base> baseIterator = basesList.iterator();
             while (baseIterator.hasNext()) {
                 Base base = baseIterator.next();
                 if (distance(base.getX(), base.getY(), enemyBlocks.getX(), enemyBlocks.getY()) > base.getRange()) {

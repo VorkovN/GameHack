@@ -57,7 +57,7 @@ public class Main {
         System.out.println("ZombieKills: " + player.getZombieKills());
 
         ArrayList<Cell> cells = Algorithms.buildMap(zombieList, basesList, enemyBlockList, zpotList, centerPoint);
-//        logicToGui.execute(cells);
+        logicToGui.execute(cells);
         BodyCommand bodyCommand = Algorithms.generateCommand(zombieList, basesList, enemyBlockList, cells, centerPoint, player.getGold());
         command.execute(bodyCommand);
     }

@@ -29,6 +29,7 @@ public class Command {
             System.out.println(gsonBody);
             HttpEntity<String> requestEntity = new HttpEntity<>(gsonBody, headers);
             ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.POST, requestEntity, String.class); //
+            System.out.println(responseEntity.getBody());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
