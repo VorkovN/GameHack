@@ -30,7 +30,7 @@ public class DataGenerator {
     public PlayerStatus generatePlayerStatus() {
         PlayerStatus playerStatus = new PlayerStatus(
                 random.nextInt(100),
-                LocalDateTime.now(),
+                LocalDateTime.now().toString(),
                 random.nextInt(1000),
                 "test",
                 random.nextInt(10000),
