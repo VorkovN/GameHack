@@ -1,6 +1,7 @@
 package com.example.zomnieapp.commands;
 
 import com.example.zomnieapp.app.HeaderConfig;
+import com.example.zomnieapp.ui_app.data.model.Coordinate;
 import com.example.zomnieapp.units.Base;
 import com.example.zomnieapp.units.EnemyBlock;
 import com.example.zomnieapp.units.Player;
@@ -53,7 +54,12 @@ public class UnitsService {
                         zombieNode.path("direction").asText(),
                         zombieNode.path("health").asInt(),
                         zombieNode.path("x").asInt(),
-                        zombieNode.path("y").asInt()
+                        zombieNode.path("y").asInt(),
+                        zombieNode.path("type").asText(),
+                        zombieNode.path("id").asText(),
+                        zombieNode.path("attack").asInt(),
+                        zombieNode.path("waitTurns").asInt(),
+                        zombieNode.path("speed").asInt()
                 );
                 zombieList.add(zombie);
             }
@@ -72,12 +78,18 @@ public class UnitsService {
 
             for (JsonNode baseJson : baseNode) {
 
+                JsonNode lastAttack = baseJson.path("lastAttack");
+
                 Base base = new Base(
                         baseJson.path("id").asText(),
                         baseJson.path("isHead").asBoolean(),
                         baseJson.path("range").asInt(),
                         baseJson.path("x").asInt(),
-                        baseJson.path("y").asInt()
+                        baseJson.path("y").asInt(),
+                        baseJson.path("attack").asInt(),
+                        baseJson.path("health").asInt(),
+                        baseJson.path("name").asText(),
+                        new Coordinate(lastAttack.path("x").asInt(), lastAttack.path("y").asInt())
                 );
                 baseList.add(base);
             }
@@ -98,7 +110,10 @@ public class UnitsService {
                 EnemyBlock enemyBlock = new EnemyBlock(
                         enemyBlocksJson.path("health").asInt(),
                         enemyBlocksJson.path("x").asInt(),
-                        enemyBlocksJson.path("y").asInt()
+                        enemyBlocksJson.path("y").asInt(),
+                        enemyBlocksJson.path("attack").asInt(),
+                        enemyBlocksJson.path("name").asText(),
+                        enemyBlocksJson.path("isHead").asBoolean()
                 );
                 enemyBlockList.add(enemyBlock);
             }

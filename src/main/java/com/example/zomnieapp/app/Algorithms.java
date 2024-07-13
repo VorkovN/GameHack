@@ -4,6 +4,9 @@ import com.example.zomnieapp.body.Attack;
 import com.example.zomnieapp.body.BodyCommand;
 import com.example.zomnieapp.body.Build;
 import com.example.zomnieapp.body.Target;
+import com.example.zomnieapp.ui_app.data.model.base.BaseSubject;
+import com.example.zomnieapp.ui_app.data.model.enemy.EnemyBaseSubject;
+import com.example.zomnieapp.ui_app.data.model.zombie.ZombieSubject;
 import com.example.zomnieapp.units.*;
 
 import java.awt.*;
@@ -26,6 +29,7 @@ public class Algorithms {
             Cell cell = cells.get(new Point(zombie.getX(), zombie.getY()));
             if (cell != null) {
                 cell.setType("zombie");
+                cell.setMapSubject(new ZombieSubject(zombie.getAttack(), zombie.getDirection(), zombie.getHealth(), zombie.getId(), zombie.getSpeed(), zombie.getType(), zombie.getWaitTurns(), zombie.getX(), zombie.getY()));
             }
         }
 
@@ -34,6 +38,7 @@ public class Algorithms {
             Cell cell = cells.get(new Point(base.getX(), base.getY()));
             if (cell != null) {
                 cell.setType("base");
+                cell.setMapSubject(new BaseSubject(base.getAttack(), base.getHealth(), base.isHead(), base.getLastAttack(), base.getName(), base.getX(), base.getY()));
             }
         }
 
@@ -42,23 +47,24 @@ public class Algorithms {
             Cell cell = cells.get(new Point(enemyBlock.getX(), enemyBlock.getY()));
             if (cell != null) {
                 cell.setType("enemyBlock");
+                cell.setMapSubject(new EnemyBaseSubject(enemyBlock.getAttack(), enemyBlock.getHealth(), enemyBlock.isHead(), null, enemyBlock.getName(), enemyBlock.getX(), enemyBlock.getY()));
 
-                Cell cell_up = cells.get(new Point(enemyBlock.getX(), enemyBlock.getY()+1));
+                Cell cell_up = cells.get(new Point(enemyBlock.getX(), enemyBlock.getY() + 1));
                 if (cell_up != null && Objects.equals(cell_up.getType(), "free")) {
                     cell_up.setType("no_build");
                 }
 
-                Cell cell_down = cells.get(new Point(enemyBlock.getX(), enemyBlock.getY()-1));
+                Cell cell_down = cells.get(new Point(enemyBlock.getX(), enemyBlock.getY() - 1));
                 if (cell_down != null && Objects.equals(cell_down.getType(), "free")) {
                     cell_down.setType("no_build");
                 }
 
-                Cell cell_right = cells.get(new Point(enemyBlock.getX()+1, enemyBlock.getY()));
+                Cell cell_right = cells.get(new Point(enemyBlock.getX() + 1, enemyBlock.getY()));
                 if (cell_right != null && Objects.equals(cell_right.getType(), "free")) {
                     cell_right.setType("no_build");
                 }
 
-                Cell cell_left = cells.get(new Point(enemyBlock.getX()-1, enemyBlock.getY()));
+                Cell cell_left = cells.get(new Point(enemyBlock.getX() - 1, enemyBlock.getY()));
                 if (cell_left != null && Objects.equals(cell_left.getType(), "free")) {
                     cell_left.setType("no_build");
                 }
@@ -72,22 +78,22 @@ public class Algorithms {
                 cell.setType(zpot.getType());
 
                 if (Objects.equals(zpot.getType(), "default")) {
-                    Cell cell_up = cells.get(new Point(zpot.getX(), zpot.getY()+1));
+                    Cell cell_up = cells.get(new Point(zpot.getX(), zpot.getY() + 1));
                     if (cell_up != null && Objects.equals(cell_up.getType(), "free")) {
                         cell_up.setType("no_build");
                     }
 
-                    Cell cell_down = cells.get(new Point(zpot.getX(), zpot.getY()-1));
+                    Cell cell_down = cells.get(new Point(zpot.getX(), zpot.getY() - 1));
                     if (cell_down != null && Objects.equals(cell_down.getType(), "free")) {
                         cell_down.setType("no_build");
                     }
 
-                    Cell cell_right = cells.get(new Point(zpot.getX()+1, zpot.getY()));
+                    Cell cell_right = cells.get(new Point(zpot.getX() + 1, zpot.getY()));
                     if (cell_right != null && Objects.equals(cell_right.getType(), "free")) {
                         cell_right.setType("no_build");
                     }
 
-                    Cell cell_left = cells.get(new Point(zpot.getX()-1, zpot.getY()));
+                    Cell cell_left = cells.get(new Point(zpot.getX() - 1, zpot.getY()));
                     if (cell_left != null && Objects.equals(cell_left.getType(), "free")) {
                         cell_left.setType("no_build");
                     }
@@ -185,7 +191,7 @@ public class Algorithms {
         TreeMap<Point, Cell> grid = new TreeMap<>(comparator);
         for (int x = point.x - grid_size; x < point.x + grid_size; x++) {
             for (int y = point.y - grid_size; y < point.y + grid_size; y++) {
-                grid.put(new Point(x, y), new Cell("free", x, y));
+                grid.put(new Point(x, y), new Cell("free", x, y, null));
             }
         }
 
@@ -195,9 +201,9 @@ public class Algorithms {
     // Определяем на нас ли движется зомби, если от нас, то и хуй с ним
     public static boolean isZombieComingToUs(Point centerPoint, Zombie zombie) {
         return centerPoint.getX() - zombie.getX() > 0 && zombie.getDirection().equals("right") ||
-               centerPoint.getX() - zombie.getX() < 0 && zombie.getDirection().equals("left") ||
-               centerPoint.getY() - zombie.getY() > 0 && zombie.getDirection().equals("up") ||
-               centerPoint.getX() - zombie.getX() > 0 && zombie.getDirection().equals("down");
+                centerPoint.getX() - zombie.getX() < 0 && zombie.getDirection().equals("left") ||
+                centerPoint.getY() - zombie.getY() > 0 && zombie.getDirection().equals("up") ||
+                centerPoint.getX() - zombie.getX() > 0 && zombie.getDirection().equals("down");
     }
 
 }

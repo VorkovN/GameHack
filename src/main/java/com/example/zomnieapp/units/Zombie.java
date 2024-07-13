@@ -10,4 +10,9 @@ public class Zombie {
     private int health;
     private int x;
     private int y;
+    private String type;
+    private String id;
+    private int attack;
+    private int waitTurns;
+    private int speed;
 }

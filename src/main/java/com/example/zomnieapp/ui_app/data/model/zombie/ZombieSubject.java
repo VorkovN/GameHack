@@ -6,16 +6,16 @@ import java.util.UUID;
 
 public class ZombieSubject implements MapSubject {
     private final int attack;
-    private final ZombieDirection direction;
+    private final String direction;
     private final int health;
-    private final UUID id;
+    private final String id;
     private final int speed;
-    private final ZombieType type;
+    private final String type;
     private int waitTurns;
     private int x;
     private int y;
 
-    public ZombieSubject(int attack, ZombieDirection direction, int health, UUID id, int speed, ZombieType type, int waitTurns, int x, int y) {
+    public ZombieSubject(int attack, String direction, int health, String id, int speed, String type, int waitTurns, int x, int y) {
         this.attack = attack;
         this.direction = direction;
         this.health = health;
@@ -31,7 +31,7 @@ public class ZombieSubject implements MapSubject {
         return attack;
     }
 
-    public ZombieDirection getDirection() {
+    public String getDirection() {
         return direction;
     }
 
@@ -39,7 +39,7 @@ public class ZombieSubject implements MapSubject {
         return health;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
@@ -47,7 +47,7 @@ public class ZombieSubject implements MapSubject {
         return speed;
     }
 
-    public ZombieType getType() {
+    public String getType() {
         return type;
     }
 

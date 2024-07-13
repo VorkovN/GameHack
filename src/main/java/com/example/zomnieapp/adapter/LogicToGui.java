@@ -44,7 +44,7 @@ public class LogicToGui {
         for (Cell cell : cells) {
             var vis = new VisibleMapPoint(
                     convertToMapPointType(cell.getType()),
-                    null,
+                    cell.getMapSubject(),
                     new Coordinate(cell.getX(), cell.getY())
             );
             visibleMapPoints.add(vis);
