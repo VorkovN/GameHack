@@ -19,7 +19,7 @@ public class ZomnieAppApplication {
             System.err.println("No graphical environment detected. Exiting.");
             System.exit(1);
         }
-        new GameThread().start();
+//        new GameThread().start();
         ConfigurableApplicationContext context = SpringApplication.run(ZomnieAppApplication.class, args);
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = context.getBean(MainFrame.class);

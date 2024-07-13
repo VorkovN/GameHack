@@ -15,6 +15,8 @@ import static java.awt.geom.Point2D.distance;
 
 public class Algorithms {
 
+    public static final int WIDTH_MAP = 40;
+
     public static ArrayList<Cell> buildMap(List<Zombie> zombieList, List<Base> basesList, List<EnemyBlock> enemyBlocksList, List<Zpot> zpotList, Point centerPoint) {
 
         ArrayList<Cell> cells = generateGrid(centerPoint); // Генерим свою пустую карту вокруг центральной точки
@@ -98,7 +100,7 @@ public class Algorithms {
         Iterator<Cell> cellIterator = cells.iterator();
         Cell cell = cellIterator.next();
         while (coins > 0 && cellIterator.hasNext()) {
-            if (cell.getType() == "free") {
+            if (cell.getType().equals("free")) {
                 --coins;
                 builds.add(new Build(cell.getX(), cell.getY()));
                 cellIterator.next();
@@ -109,7 +111,7 @@ public class Algorithms {
     }
 
     public static ArrayList<Cell> generateGrid(Point point) {
-        int grid_size = 20; // Половина размера сетки
+        int grid_size = WIDTH_MAP / 2; // Половина размера сетки
         ArrayList<Cell> grid = new ArrayList<>();
         for (int x = point.x - grid_size; x < point.x + grid_size; x++) {
             for (int y = point.x - grid_size; y < point.x + grid_size; y++) {
@@ -122,10 +124,10 @@ public class Algorithms {
 
     // Определяем на нас ли движется зомби, если от нас, то и хуй с ним
     public static boolean isZombieComingToUs(Point centerPoint, Zombie zombie) {
-        return centerPoint.getX() - zombie.getX() > 0 && zombie.getDirection() == "right" ||
-               centerPoint.getX() - zombie.getX() < 0 && zombie.getDirection() == "left" ||
-               centerPoint.getY() - zombie.getY() > 0 && zombie.getDirection() == "up" ||
-               centerPoint.getX() - zombie.getX() > 0 && zombie.getDirection() == "down";
+        return centerPoint.getX() - zombie.getX() > 0 && zombie.getDirection().equals("right") ||
+               centerPoint.getX() - zombie.getX() < 0 && zombie.getDirection().equals("left") ||
+               centerPoint.getY() - zombie.getY() > 0 && zombie.getDirection().equals("up") ||
+               centerPoint.getX() - zombie.getX() > 0 && zombie.getDirection().equals("down");
     }
 
 }

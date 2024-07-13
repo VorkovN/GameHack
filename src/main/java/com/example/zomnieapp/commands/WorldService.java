@@ -1,7 +1,6 @@
 package com.example.zomnieapp.commands;
 
 import com.example.zomnieapp.app.HeaderConfig;
-import com.example.zomnieapp.temp.JSON;
 import com.example.zomnieapp.units.Zpot;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,22 +15,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class World {
+public class WorldService {
 
     private static final String URL = "https://games-test.datsteam.dev/play/zombidef/world";
     private final RestTemplate restTemplate;
+    private String responseBody;
 
-    public World() {
+    public WorldService() {
         this.restTemplate = new RestTemplate();
+    }
+
+    public void getResponseAndInit() {
+        try {
+            HttpHeaders headers = HeaderConfig.getAuthHeader();
+            HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class); //
+            this.responseBody = responseEntity.getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Fail to create request to /play/zombidef/world" + e.getMessage());
+        }
     }
 
     public List<Zpot> getZpots() {
         List<Zpot> zpotList = new ArrayList<>();
         try {
-            HttpHeaders headers = HeaderConfig.getAuthHeader();
-            HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class); //
-            String responseBody = responseEntity.getBody();
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);

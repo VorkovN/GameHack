@@ -35,9 +35,9 @@ public class UnitsService {
             HttpHeaders headers = HeaderConfig.getAuthHeader();
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
             ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, String.class);
-            responseBody = responseEntity.getBody();
+            this.responseBody = responseEntity.getBody();
         } catch (Exception e) {
-            throw new RuntimeException("Fail to create request" + e.getMessage());
+            throw new RuntimeException("Fail to create request to /play/zombidef/units" + e.getMessage());
         }
     }
 

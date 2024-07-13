@@ -1,11 +1,7 @@
 package com.example.zomnieapp.commands;
 
 import com.example.zomnieapp.app.HeaderConfig;
-import com.example.zomnieapp.body.Attack;
 import com.example.zomnieapp.body.BodyCommand;
-import com.example.zomnieapp.body.Target;
-import com.example.zomnieapp.units.Base;
-import com.example.zomnieapp.units.Zombie;
 import com.google.gson.Gson;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,9 +9,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class Command {
@@ -29,7 +22,7 @@ public class Command {
         this.gson = new Gson();
     }
 
-    public void attackFromBases(BodyCommand bodyCommand) {
+    public void execute(BodyCommand bodyCommand) {
         try {
             HttpHeaders headers = HeaderConfig.getAuthHeader();
             String gsonBody = gson.toJson(bodyCommand);

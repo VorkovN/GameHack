@@ -5,6 +5,7 @@ import com.example.zomnieapp.ui_app.data.model.Coordinate;
 import com.example.zomnieapp.ui_app.data.model.PlayerStatus;
 import com.example.zomnieapp.ui_app.data.model.VisibleMapPoint;
 import com.example.zomnieapp.ui_app.ui.model.RenderMapPoint;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 import static com.example.zomnieapp.ui_app.data.model.MapPointType.DEFAULT;
 import static java.lang.Math.max;
 
+@Component
 public class RenderDataRepositoryImpl implements RenderDataRepository {
 
     private volatile OnNewDataListener onNewDataListener;
